@@ -1,0 +1,121 @@
+{% extends 'includes/base.html' %}
+{% load static %}
+{% block content %}
+<!-- Breadcrumb Section Begin -->
+<section class="breadcrumb-option">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-12">
+				<div class="breadcrumb__text">
+					<h4>Products</h4>
+					<div class="breadcrumb__links">
+						<a href="{% url 'home' %}">Home</a>
+						<span>Products</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+ </section>
+ <!-- Breadcrumb Section End -->
+
+ <!-- Shop Section Begin -->
+<section class="shop spad">
+	<div class="container">
+		<div class="row">
+			<div class="col-lg-3">
+				<div class="shop__sidebar">
+					<div class="shop__sidebar__search">
+						<form action="#">
+							<input type="text" placeholder="Search...">
+							<button type="submit"><span class="icon_search"></span></button>
+						</form>
+					</div>
+					{% include 'filters.html' %}
+				</div>
+			</div>
+			<div class="col-lg-9">
+				<div class="shop__product__option">
+					<div class="row">
+						<div class="col-lg-6 col-md-6 col-sm-6">
+							<div class="shop__product__option__left">
+								<p>Showing 1 of {{ data|length }} results</p>
+							</div>
+						</div>
+						<div class="col-lg-6 col-md-6 col-sm-6">
+							<div class="shop__product__option__right">
+								<p>Sort by Price:</p>
+								<select>
+									<option value="">Low To High</option>
+									<option value="">$0 - $55</option>
+									<option value="">$55 - $100</option>
+								</select>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row" id="filteredProducts">
+					<p class="ajaxLoader">Loading...</p>
+					{% for product in data %}
+					<div class="col-lg-4 col-md-6 col-sm-6">
+						<div class="product__item sale">
+							<div class="product__item__pic set-bg" data-setbg="{{product.productattribute_set.first.image.url}}">
+								
+								{% if product.productattribute_set.first.sell_price != product.productattribute_set.first.price %}
+								<span class="label">Sale</span>
+								{% else %}
+								{% endif %}
+								<ul class="product__hover">
+									{% if user.is_authenticated %}
+									<li><a href="#"><img src="{% static 'media/images/icons/heart.png' %}" alt=""></a></li>
+									{% else %}
+									{% endif %}
+									<li><a href="/product/{{product.slug}}/{{product.id}}"><img src="{% static 'media/images/icons/search.png' %}" alt=""></a></li>
+								</ul>
+							</div>
+							<div class="product__item__text">
+								<h6 style="font-size: 12px; color: rgb(147, 147, 147);">{{product.category|upper}}</h6>
+								<h6>{{product.title}}</h6>
+												
+								<input type="hidden" value="1" class="form-control product-qty-{{product.id}}" id="productQty" />
+								<input type="hidden" class="product-image-{{product.id}}" value="{{product.productattribute_set.first.image}}" />
+								<input type="hidden" class="product-id-{{product.id}}" value="{{product.id}}" />
+								<input type="hidden" class="product-title-{{product.id}}" value="{{product.title}}" />
+								<a href="/" class="add-cart add-to-cart" data-index="{{product.id}}">+ Add To Cart</a>
+								<div class="rating">
+									<i class="fa fa-star-o"></i>
+									<i class="fa fa-star-o"></i>
+									<i class="fa fa-star-o"></i>
+									<i class="fa fa-star-o"></i>
+									<i class="fa fa-star-o"></i>
+								</div>
+								{% if product.productattribute_set.first.sell_price == product.productattribute_set.first.price %}
+								<h5>$<span class="product-price-{{data.id}}">{{product.productattribute_set.first.sell_price}}</span></h5>
+								{% else %}
+								<h5>$<span class="product-price-{{data.id}}">{{product.productattribute_set.first.sell_price}}</span> <span style="text-decoration:line-through; font-size: 15px; color: rgb(138, 135, 135);" >{{product.productattribute_set.first.price}}</span></h5>
+								{% endif %}
+
+								<div class="product__color__select">
+									{% for color in product.productattribute_set.all %}
+										<label class="choose-color" data-color="{{color.id}}" style="background-color: {{color.color.color_code}}" for="sp-1">
+											<input type="radio" id="">
+										</label>
+									{% endfor %}
+									<div class="product__size__select">  
+										{% for size in product.productattribute_set.all %}
+										<label class="choose-size color{{size.color_id}}" data-size="{{size.size_id}}" data-price="{{size.price}}" data-discount="{{size.discount}}" data-image="{{size.image}}" for="{{size.size.size_code}}}">{{size.size.size_code}}
+											<input type="radio" id="{{size.size.size_code}}">
+										</label>
+										{% endfor %}
+									</div>
+								</div>
+							</div>
+						</div>
+					</div> 
+			{% endfor %}
+			</div>
+		</div>
+	</div>
+</section>
+<!-- Shop Section End -->
+{% endblock %}
