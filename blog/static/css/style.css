@@ -1510,9 +1510,11 @@ ol {
 }
 
 .product__details__pic .nav-tabs {
+	display: flex;
+	justify-content: center;
 	border-bottom: none;
-	width: 105px;
-	margin-left: 170px;
+	width: 100%;
+	margin: 0;
 }
 
 .product__details__pic .nav-tabs .nav-item {
@@ -1817,18 +1819,6 @@ ol {
 	padding: 0 0px;
 }
 
-.product__details__last__option h5:before {
-	position: absolute;
-	left: 0;
-	right: 0;
-	top: 10px;
-	height: 1px;
-	width: 460px;
-	background: #e5e5e5;
-	content: "";
-	z-index: -1;
-	margin: 0 auto;
-}
 
 .product__details__last__option ul {
 	padding-top: 40px;

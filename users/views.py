@@ -69,7 +69,8 @@ def register(request):
             user.is_active=True
             user.save()
             # activateEmail(request, user, form.cleaned_data.get('email'))
-            return redirect('home')
+            messages.success(request, "Thank you for creating an account with us. Now you can login your account.")
+            return redirect('login')
 
         else:
             for error in list(form.errors.values()):
@@ -101,17 +102,28 @@ def custom_login(request):
             )
             if user is not None:
                 login(request, user)
-                for p_id,item in request.session['cartdata'].items():
-                    product_attribute_id = ProductAttribute.objects.get(id=p_id)
-                    cart = Cart.objects.create(
-                        user = user,
-                        product_attribute = product_attribute_id,
-                        qty = int(item['qty'])
-                    )
-                    cart.save()
-                del request.session['cartdata']
-                messages.success(request, f"Hello <b>{user.username}</b>! You have been logged in")
-                return redirect("home")
+                if 'cartdata' in request.session:
+                    for p_id,item in request.session['cartdata'].items():
+                        if Cart.objects.filter(product_attribute = p_id).filter(user=user).exists():
+                            product_attribute_id = ProductAttribute.objects.get(id=p_id)                
+                            cart = Cart.objects.get(product_attribute = product_attribute_id, user=user)
+                            cart.qty = int(item['qty'])
+                            cart.save()
+                        else:
+                            product_attribute_id = ProductAttribute.objects.get(id=p_id)
+                            cart = Cart.objects.create(
+                                user = user,
+                                product_attribute = product_attribute_id,
+                                qty = int(item['qty'])
+                            )
+                            cart.save()
+                    del request.session['cartdata']
+                    messages.success(request, f"Hello <b>{user.username}</b>! You have been logged in")
+                    return redirect("home")
+                else:
+                    messages.success(request, f"Hello <b>{user.username}</b>! You have been logged in")
+                    return redirect("home")
+
 
         else:
             for key, error in list(form.errors.items()):

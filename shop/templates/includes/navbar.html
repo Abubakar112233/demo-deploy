@@ -113,7 +113,7 @@
                     <a href="#" class="search-switch"><img src="{% static 'media/images/icons/search.png' %}" alt=""></a>
                     <a href="#"><img src="{% static 'media/images/icons/heart.png' %}" alt=""></a>
                     <a href="{% url 'cart' %}"><img src="{% static 'media/images/icons/cart.png' %}" alt=""> <span class="cart-list">{{request.session.cartdata|length}}</span></a>
-                    <div class="price">د.إ <span>{{request.session.cartdata}}</span></div>
+                    <div class="price">د.إ .<span class="cart-list">{{request.session.cartdata}}</span></div>
                 </div>
             </div>
         </div>

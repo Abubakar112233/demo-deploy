@@ -1,3 +1,5 @@
+
+{% load custom_tags %}
 <div class="container">
 	<h3 class="my-4 border-bottom pb-1">Cart ({{totalitems}})</h3>
 	<div class="row">
@@ -10,38 +12,73 @@
 							<th>Color</th>
 							<th>Size</th>
 							<th>Quantity</th>
-							<th>update</th>
 							<th>Total</th>
+							<th></th>
 						</tr>
 					</thead>
 					<tbody>
-						{% for product_id,item in cart_data.items %}
-						<tr>
-							<td class="product__cart__item">
-								<div class="product__cart__item__pic">
-									<img src="/media/{{item.image.url}}" alt="">
-								</div>
-								<div class="product__cart__item__text">
-									<h6><a href="/product/{{item.title|slugify}}/{{product_id}}">{{item.title}}</a></h6>
-									<h5>${{item.price}}</h5>
-								</div>
-							</td>
-							<td>color</td>
-							<td>size</td>
-							<td class="quantity__item">
-								<div class="quantity">
-									<div class="pro-qty-2">
-										<input type="number" class="product-qty-{{product_id}}" value="{{item.qty}}">
+						{% if user.is_authenticated %}
+							{% for data in cart_items %}
+							<tr>
+								<td class="product__cart__item">
+									<div class="product__cart__item__pic">
+										<img src="/media/{{data.product_attribute.image}}" width="80px" alt="">
 									</div>
-								</div>
-							</td>								
-							<td><button class="btn btn-sm btn-primary update-item" data-item="{{product_id}}"><i class="fa fa-sync"></i></button></td>
-							<td class="cart__price">$ {% widthratio item.price 1 item.qty %}</td>
-							<td class="cart__close delete-item" data-item="{{product_id}}"><i class="fa fa-close"></i></td>
-							<th>{{prod_id}}</th>
-						</tr>							
-						{% endfor %}
-						
+									<div class="product__cart__item__text">
+										<h6><a href="/product/{{data.product.title|slugify}}/{{data.product_attribute.id}}">{{data.product_attribute.product.title}}</a></h6>
+										<h5>د.إ .{{data.product_attribute.sell_price}}</h5>
+									</div>
+								</td>
+								<th>
+									<div style="width: 40px; height: 40px; border-radius: 5px; background-color: {{data.product_attribute.color}};">
+									</div>
+								</th>
+								<th>{{data.product_attribute.size}}</th>
+								<td class="quantity__item">
+									<div class="quantity">
+										<div class="pro-qty-2">
+											<span class="fa fa-angle-left dec qtybtn update-item" data-item="{{data.id}}"></span>
+											<input type="number" class="product-qty-{{data.id}}" readonly value="{{data.qty}}"">
+											<span class="fa fa-angle-right inc qtybtn update-item" data-item="{{data.id}}"></span>
+										</div>
+									</div>
+								</td>		
+								<td class="cart__price">د.إ . {% widthratio data.product_attribute.sell_price 1 data.qty %}</td>
+								<td class="cart__close delete-item" data-item="{{data.id}}"><i class="fa fa-close"></i></td>
+							</tr>
+							{% endfor %}
+
+						{% else %}
+							{% for product_id,item in cart_data.items %}
+							<tr>
+								<td class="product__cart__item">
+									<div class="product__cart__item__pic">
+										<img src="/media/{% get_obj product_id "image" %}" width="80px" alt="">
+									</div>
+									<div class="product__cart__item__text">
+										<h6><a href="/product/{{item.title|slugify}}/{{product_id}}">{{item.title}}</a></h6>
+										<h5>د.إ .{{item.price}}</h5>
+									</div>
+								</td>
+								<th>
+									<div style="width: 40px; height: 40px; border-radius: 5px; background-color: {% get_obj product_id "color" %};">
+									</div>
+								</th>
+								<th>{% get_obj product_id "size" %}</th>
+								<td class="quantity__item">
+									<div class="quantity">
+										<div class="pro-qty-2">
+											<span class="fa fa-angle-left dec qtybtn update-item" data-item="{{product_id}}"></span>
+											<input type="number" class="product-qty-{{product_id}}" readonly value="{{item.qty}}">
+											<span class="fa fa-angle-right inc qtybtn update-item" data-item="{{product_id}}"></span>
+										</div>
+									</div>
+								</td>		
+								<td class="cart__price">د.إ . {% widthratio item.price 1 item.qty %}</td>
+								<td class="cart__close delete-item" data-item="{{product_id}}"><i class="fa fa-close"></i></td>
+							</tr>							
+							{% endfor %}
+						{% endif %}	
 					</tbody>
 				</table>
 			</div>
@@ -61,16 +98,16 @@
 					<button type="submit">Apply</button>
 				</form>
 			</div> -->
-			<div class="cart__total">
-				<h6>Cart total</h6>
-				<ul>
-					<li>Subtotal <span>$ {{total_amt}}</span></li>
-					<li>Total <span>$ {{total_amt}}</span></li>
-				</ul>
-				{% if totalitems %}
-				<a href="{% url 'checkout' %}" class="primary-btn">Proceed to checkout</a>
-				{% endif %}
-			</div>
+				<div class="cart__total">
+					<h6>Cart total</h6>
+					<ul>
+						<li>Subtotal <span>د.إ . {{total_amt}}</span></li>
+						<li>Total <span>د.إ . {{total_amt}}</span></li>
+					</ul>
+					{% if total_amt%}
+					<a href="{% url 'checkout' %}" class="primary-btn">Proceed to checkout</a>
+					{% endif %}
+				</div>
 		</div>
 	</div>
 </div>

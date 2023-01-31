@@ -54,9 +54,9 @@
                         <i class="fa fa-star-o"></i>
                     </div>
                     {% if product.productattribute_set.first.sell_price == product.productattribute_set.first.price %}
-                    <h5>$<span class="product-price-{{data.id}}">{{product.productattribute_set.first.sell_price}}</span></h5>
+                    <h5>د.إ .<span class="product-price-{{data.id}}">{{product.productattribute_set.first.sell_price}}</span></h5>
                     {% else %}
-                    <h5>$<span class="product-price-{{data.id}}">{{product.productattribute_set.first.sell_price}}</span> <span style="text-decoration:line-through; font-size: 15px; color: rgb(138, 135, 135);" >{{product.productattribute_set.first.price}}</span></h5>
+                    <h5>د.إ .<span class="product-price-{{data.id}}">{{product.productattribute_set.first.sell_price}}</span> <span style="text-decoration:line-through; font-size: 15px; color: rgb(138, 135, 135);" >{{product.productattribute_set.first.price}}</span></h5>
                     {% endif %}
 
                     <div class="product__color__select">

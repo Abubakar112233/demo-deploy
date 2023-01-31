@@ -136,7 +136,7 @@ def add_to_cart(request):
 		p_qty = request.GET['qty'] 
 
 		if Cart.objects.filter(product_attribute = product_id).filter(user=user).exists():
-			cart = Cart.objects.get(product_attribute=product_id)
+			cart = Cart.objects.get(product_attribute = product_id, user=user)
 			cart.qty = p_qty
 			cart.save()
 
@@ -185,15 +185,21 @@ def add_to_cart(request):
 		return JsonResponse({'data':request.session['cartdata'],'totalitems':len(request.session['cartdata']), 'total_price':total_price})
 \
 def cart_list(request):
-	user=request.user
-	total_amt=0
-	cart_items = Cart.objects.filter(user=user)
-	if 'cartdata' in request.session:
-		for p_id,item in request.session['cartdata'].items():
-			total_amt+=int(item['qty'])*float(item['price'])
-		return render(request, 'cart/cart.html',{'cart_data':request.session['cartdata'],'totalitems':len(request.session['cartdata']),'total_amt':total_amt,'cart_items':cart_items})
-	else:
+	if request.user.is_authenticated:
+		user=request.user
+		total_amt=0
+		cart_items = Cart.objects.filter(user=user)
+		for item in cart_items:
+			total_amt+=item.qty*item.product_attribute.sell_price
 		return render(request, 'cart/cart.html',{'cart_data':'','totalitems':0,'total_amt':total_amt,'cart_items':cart_items})
+	else:
+		total_amt=0
+		if 'cartdata' in request.session:
+			for p_id,item in request.session['cartdata'].items():
+				total_amt+=int(item['qty'])*float(item['price'])
+			return render(request, 'cart/cart.html',{'cart_data':request.session['cartdata'],'totalitems':len(request.session['cartdata']),'total_amt':total_amt})
+		else:
+			return render(request, 'cart/cart.html',{'cart_data':'','totalitems':0,'total_amt':total_amt})
 
 
 # Delete Cart Item
@@ -210,7 +216,7 @@ def delete_cart_item(request):
 		for item in cart_items:
 			total_amt+=int(item.qty)*float(item.product_attribute.sell_price)
 		
-		t=render_to_string('ajax/cart-list.html',{'cart_data':request.session['cartdata'],'totalitems':len(request.session['cartdata']),'total_amt':total_amt})
+		t=render_to_string('ajax/cart-list.html',{'cart_data':request.session['cartdata'],'totalitems':len(request.session['cartdata']),'total_amt':total_amt,'cart_items':cart_items})
 		return JsonResponse({'data':t,'totalitems':len(request.session['cartdata'])})
 
 	else:
@@ -243,7 +249,7 @@ def update_cart_item(request):
 		for item in cart_items:
 			total_amt+=int(item.qty)*float(item.product_attribute.sell_price)
 		
-		t=render_to_string('ajax/cart-list.html',{'cart_data':request.session['cartdata'],'totalitems':len(request.session['cartdata']),'total_amt':total_amt})
+		t=render_to_string('ajax/cart-list.html',{'cart_data':request.session['cartdata'],'totalitems':len(request.session['cartdata']),'total_amt':total_amt,'cart_items':cart_items})
 		return JsonResponse({'data':t,'totalitems':len(request.session['cartdata'])})
 
 	else:
