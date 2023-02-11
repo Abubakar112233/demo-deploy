@@ -69,6 +69,8 @@ class SetPasswordForm(SetPasswordForm):
     class Meta:
         model = get_user_model()
         fields = ['new_password1', 'new_password2']
+    new_password1=forms.CharField(widget=forms.PasswordInput(attrs={'class': 'password', 'placeholder': 'Password'}))
+    new_password2=forms.CharField(widget=forms.PasswordInput(attrs={'class': 'password', 'placeholder': 'Confirm Password'}))
 
 class PasswordResetForm(PasswordResetForm):
     def __init__(self, *args, **kwargs):

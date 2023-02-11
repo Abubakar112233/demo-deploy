@@ -1,12 +1,14 @@
 from django.db import models
 from django.utils.html import mark_safe
 from django.contrib.auth import get_user_model
-from django.core.validators import MinValueValidator
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.utils import timezone
-# Banner
+
 class Banner(models.Model):
     title=models.CharField(max_length=200)
     desc=models.CharField(max_length=500)
+    discount_1=models.IntegerField(validators=[MinValueValidator(0.0), MaxValueValidator(100.0)],default=0.0)
+    discount_2=models.IntegerField(validators=[MinValueValidator(0.0), MaxValueValidator(100.0)],default=0.0)
     img=models.ImageField(upload_to="banner_imgs/")
     alt_text=models.CharField(max_length=300)
 
@@ -57,7 +59,7 @@ class Color(models.Model):
         return mark_safe('<div style="width:30px; height:30px; background-color:%s"></div>' % (self.color_code))
 
     def __str__(self):
-        return self.color_code
+        return self.title
 
 # Size
 class Size(models.Model):
@@ -68,7 +70,7 @@ class Size(models.Model):
         verbose_name_plural='5. Sizes'
 
     def __str__(self):
-        return self.size_code
+        return self.title
 
 # Product Model
 class Product(models.Model):
@@ -103,15 +105,18 @@ class ProductAttribute(models.Model):
     color=models.ForeignKey(Color,on_delete=models.CASCADE)
     size=models.ForeignKey(Size,on_delete=models.CASCADE)
     price=models.FloatField(validators=[MinValueValidator(0.0)], default=0)
-    discount=models.FloatField(default=0.0)
+    discount=models.IntegerField(validators=[MinValueValidator(0.0), MaxValueValidator(100.0)],default=0.0)
     quantity=models.PositiveIntegerField(default=0)
-    sell_price=models.IntegerField(null=True, validators=[MinValueValidator(0.0)])
+    sell_price=models.FloatField(null=True, validators=[MinValueValidator(0.0)])
     image=models.ImageField(upload_to="product_imgs/",null=True)
 
     @property
     def sell_price(self):
-        total = (self.price)-(self.discount)
-        return total
+        discount = 100 - self.discount
+        discount_num = discount/100
+        discount_num_b = float(discount_num)
+        total = self.price*discount_num_b
+        return round(total, 1)
 
     class Meta:
         verbose_name_plural='Product Attributes'
@@ -204,6 +209,4 @@ class UserAddressBook(models.Model):
     status=models.BooleanField(default=False)
 
     class Meta:
-        verbose_name_plural='AddressBook'
-
-    
+        verbose_name_plural='AddressBook'  

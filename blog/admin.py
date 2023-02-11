@@ -3,7 +3,7 @@ from .models import Article
 
 class ArticleAdmin(admin.ModelAdmin):
     fieldsets = [
-        ("Header", {"fields": ['title', 'subtitle', 'article_slug', 'series', 'author', 'image']}),
+        ("Header", {"fields": ['title', 'subtitle', 'article_slug', 'author', 'image']}),
         ("Content", {"fields": ['content', 'notes']}),
         ("Date", {"fields": ['modified']})
     ]

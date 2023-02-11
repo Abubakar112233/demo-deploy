@@ -1,5 +1,6 @@
 from logging.config import valid_ident
 from typing import Protocol
+from django.http import JsonResponse,HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, logout, authenticate, get_user_model
 from django.contrib import messages
@@ -17,8 +18,32 @@ from django.views.decorators.csrf import csrf_protect
 from .forms import UserRegistrationForm, UserLoginForm, UserUpdateForm, SetPasswordForm, PasswordResetForm
 from .decorators import user_not_authenticated
 from .tokens import account_activation_token
-from .models import SubscribedUsers
+from .models import SubscribedUsers, CustomUser, Currency
 from shop.models import Cart, ProductAttribute
+
+# Delete Cart Item
+def change_currency(request):
+    p_id=int(str(request.GET['id']))
+    selected_currency = Currency.objects.get(id=p_id)
+    if request.user.is_authenticated:
+        current_user=request.user
+        user = CustomUser.objects.get(username=current_user)
+        user.currency = selected_currency
+        user.save()
+        
+        messages.success(request, "Currency changed")
+        return HttpResponse('')
+    else:
+        # del request.session['cartdata']
+        p_id=int(str(request.GET['id']))
+        selected_currency={}
+        selected_currency={		
+            'currency':p_id,
+        }
+        request.session['currencyselected'] = selected_currency
+        messages.success(request, "Currency changed")
+        return HttpResponse('')
+
 
 def signup_redirect(request):
     messages.error(request, "Something wrong here, it may be that you already have account!")
@@ -66,10 +91,10 @@ def register(request):
         form = UserRegistrationForm(request.POST)
         if form.is_valid():
             user = form.save(commit=False)
-            user.is_active=True
+            user.is_active=False
             user.save()
-            # activateEmail(request, user, form.cleaned_data.get('email'))
-            messages.success(request, "Thank you for creating an account with us. Now you can login your account.")
+            activateEmail(request, user, form.cleaned_data.get('email'))
+            messages.success(request, "Thank you for creating an account with us. Please go to your email to activate your account.")
             return redirect('login')
 
         else:
@@ -240,7 +265,7 @@ def passwordResetConfirm(request, uidb64, token):
             if form.is_valid():
                 form.save()
                 messages.success(request, "Your password has been set. You may go ahead and <b>log in </b> now.")
-                return redirect('home')
+                return redirect('login')
             else:
                 for error in list(form.errors.values()):
                     messages.error(request, error)

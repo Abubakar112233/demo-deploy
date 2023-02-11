@@ -17,7 +17,7 @@
                     <div class="blog__item">
                         <div class="blog__item__pic set-bg" data-setbg="{{articles.image.url}}"></div>
                         <div class="blog__item__text">
-                            <span><img src="{% static '/media/img/icon/calendar.png' %}" alt="">{{articles.published|date:"F d, Y"}}</span>
+                            <span><img src="{% static 'media/images/icons/calendar.png' %}" alt="">{{articles.published|date:"F d, Y"}}</span>
                             <h5>{{articles.title}}</h5>
                             <a href="{% url 'article' articles.slug %}">Read More</a>
                         </div>

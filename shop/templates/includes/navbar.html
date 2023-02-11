@@ -1,7 +1,8 @@
 <!-- Offcanvas Menu Begin -->
 {% load static %}
+{% load custom_tags %}
 <div class="offcanvas-menu-overlay"></div>
-<div class="offcanvas-menu-wrapper">
+<div class="offcanvas-menu-wrapper" style="padding-top: 100px;">
     
 
 
@@ -39,13 +40,21 @@
             <a href="{% url 'register' %}">SIGNUP</a>
         </div>
         {% endif %}
-
+        <div class="offcanvas__top__hover">
+            <span>{% if user.is_authenticated %}{% get_selected_currency user %}{% else %}{% get_selected_currency_session request %} {% endif %}<i class="arrow_carrot-down"></i></span>
+            <ul>
+                {% get_currency_options as currency_options %}
+                {% for currencies in currency_options %}
+                <li><a class="dropdown-item choose-currency" data-currency="{{currencies.id}}">{{currencies.currency_short_name}}</a></li>
+                {% endfor %}
+            </ul>
+        </div>
     </div>
     <div class="offcanvas__nav__option">
         <a href="#" class="search-switch"><img src="{% static 'media/images/icons/search.png' %}" alt=""></a>
         <a href="#"><img src="{% static 'media/images/icons/heart.png' %}" alt=""></a>
-        <a href="#"><img src="{% static 'media/images/icons/cart.png' %}" alt=""> <span>{{request.session.cartdata|length}}</span></a>
-        <div class="price">د.إ <span>{{request.session.cartdata}}</span></div>
+        <a href="{% url 'cart' %}"><img src="{% static 'media/images/icons/cart.png' %}" alt=""> <span class="cart-list">{% if user.is_authenticated %}{% get_cart_items_length user %}{% else %}{{request.session.cartdata|length}}{% endif %}</span></a>
+        <div class="price"><span class="cart-list">{% if user.is_authenticated %}{% get_cart_items_total_amt user %}{% else %}{% get_cart_items_total_amt_session request %}{% endif %}</span></div>
     </div>
     <div id="mobile-menu-wrap"></div>
     <div class="offcanvas__text">
@@ -55,7 +64,7 @@
 <!-- Offcanvas Menu End -->
 
 <!-- Header Section Begin -->
-<header class="header" style="border-bottom: 1px solid black;">
+<header class="header" style="border-bottom: 1px solid black; position: fixed; z-index:9999; width: 100%; top: 0px; left: 0px;">
     <div class="header__top">
         <div class="container">
             <div class="row">
@@ -80,6 +89,15 @@
                             <a href="{% url 'register' %}">SIGNUP</a>
                         </div>
                         {% endif %}
+                        <div class="header__top__hover">
+                            <span>{% if user.is_authenticated %}{% get_selected_currency user %}{% else %}{% get_selected_currency_session request %} {% endif %}<i class="arrow_carrot-down"></i></span>
+                            <ul>
+                                {% get_currency_options as currency_options %}
+                                {% for currencies in currency_options %}
+                                <li><a class="dropdown-item choose-currency" data-currency="{{currencies.id}}">{{currencies.currency_short_name}}</a></li>
+                                {% endfor %}
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -111,9 +129,9 @@
             <div class="col-lg-3 col-md-3">
                 <div class="header__nav__option">
                     <a href="#" class="search-switch"><img src="{% static 'media/images/icons/search.png' %}" alt=""></a>
-                    <a href="#"><img src="{% static 'media/images/icons/heart.png' %}" alt=""></a>
-                    <a href="{% url 'cart' %}"><img src="{% static 'media/images/icons/cart.png' %}" alt=""> <span class="cart-list">{{request.session.cartdata|length}}</span></a>
-                    <div class="price">د.إ .<span class="cart-list">{{request.session.cartdata}}</span></div>
+                    {% if user.is_authenticated %}<a href="{% url 'my_wishlist' %}"><img src="{% static 'media/images/icons/heart.png' %}" alt=""><span>{% get_wishlist user %}</span></a>{% endif %}
+                    <a href="{% url 'cart' %}"><img src="{% static 'media/images/icons/cart.png' %}" alt=""> <span class="cart-list">{% if user.is_authenticated %}{% get_cart_items_length user %}{% else %}{{request.session.cartdata|length}}{% endif %}</span></a>
+                    <div class="price"><span class="cart-list">{% if user.is_authenticated %}{% get_cart_items_total_amt user %}{% else %}{% get_cart_items_total_amt_session request %}{% endif %}</span></div>
                 </div>
             </div>
         </div>

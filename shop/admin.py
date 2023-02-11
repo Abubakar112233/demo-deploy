@@ -32,7 +32,7 @@ class ProductTagsInline(admin.TabularInline):
 
 # Product Attribute
 class ProductAttributeAdmin(admin.ModelAdmin):
-    list_display=('id','image_tag','product','price','color','size')
+    list_display=('id','image_tag','product','price','discount','sell_price','color','size')
 admin.site.register(ProductAttribute, ProductAttributeAdmin)
 
 class ProductAdmin(admin.ModelAdmin):

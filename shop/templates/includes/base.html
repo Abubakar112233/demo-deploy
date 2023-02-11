@@ -32,12 +32,16 @@
 
 
 <body>
-
-
+    <!-- Page Preloder -->
+    <div id="preloder">
+        <div class="loader"></div>
+    </div>
 	{% include 'includes/navbar.html' %}
     {% include 'includes/message.html' %}
+    <div style="margin-top: 90px;">
     {% block content %}
     {% endblock %}
+    </div>
     {% include 'includes/footer.html' %}
 
 
