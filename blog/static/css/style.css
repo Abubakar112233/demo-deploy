@@ -2521,12 +2521,13 @@ ol {
 -----------------------*/
 
 .coupon__code {
+	margin-top: -70px;
 	color: #0d0d0d;
 	font-size: 14px;
 	border-top: 2px solid #77b527;
 	background: #f5f5f5;
 	padding: 23px 30px 18px;
-	margin-bottom: 50px;
+	margin-bottom: 20px;
 }
 
 .coupon__code span {
@@ -2670,6 +2671,16 @@ ol {
 	margin-top: 8px;
 }
 
+.checkout__order a {
+	color: white;
+	text-align: center;
+}
+.checkout__order a:hover{
+	color: white;
+	text-align: center;
+	cursor: pointer;
+}
+
 .checkout__order__products {
 	font-size: 16px;
 	color: #111111;
@@ -2679,6 +2690,7 @@ ol {
 
 .checkout__order__products span {
 	float: right;
+	padding-left: 80px;
 }
 
 .checkout__total__products {
@@ -2699,8 +2711,10 @@ ol {
 }
 
 .checkout__total__products li span {
+	text-align: center;
 	color: #111111;
 	float: right;
+	padding-left: 60px;
 }
 
 .checkout__total__all {

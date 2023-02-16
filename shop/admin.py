@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Banner,Category,Brand,Color,Size,ProductPicture,Product,ProductAttribute,ProductTag,CartOrder,CartOrderItems,ProductReview,Wishlist,UserAddressBook,Cart
+from .models import Banner,Category,Brand,Color,Size,ProductPicture,Product,ProductAttribute,ProductTag,CartOrder,CartOrderItems,ProductReview,Wishlist,UserAddressBook,Cart,Countries
 from django import forms
 
 # admin.site.register(Banner)
@@ -32,7 +32,7 @@ class ProductTagsInline(admin.TabularInline):
 
 # Product Attribute
 class ProductAttributeAdmin(admin.ModelAdmin):
-    list_display=('id','image_tag','product','price','discount','sell_price','color','size')
+    list_display=('id','image_tag','product','price','discount','sell_price','quantity','color','size')
 admin.site.register(ProductAttribute, ProductAttributeAdmin)
 
 class ProductAdmin(admin.ModelAdmin):
@@ -77,3 +77,7 @@ admin.site.register(Wishlist)
 class UserAddressBookAdmin(admin.ModelAdmin):
 	list_display=('user','address','status')
 admin.site.register(UserAddressBook,UserAddressBookAdmin)
+
+class CountriesAdmin(admin.ModelAdmin):
+	list_display=('country_name','delivery_price')
+admin.site.register(Countries,CountriesAdmin)

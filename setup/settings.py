@@ -16,6 +16,9 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# stripe keys
+STRIPE_PUBLIC_KEY = "pk_test_51Mbmz4KirxGofcWOsXQOR6a2c70rMKwZfc0UIXvI6xAPRubgLANtnT8tc3uTifCpSUjXPImaV8ub4IukXdx8HaJe009Vi4k3G5"
+STRIPE_SECRET_KEY = "sk_test_51Mbmz4KirxGofcWOACWtmfzzvdvivYtqMeMqg3ggZW1RB4BVMiNm1tUWKBnLd5NRMuwLOnHZHXzsZc0Na0L9FaqD00G7t91Ti6"
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/

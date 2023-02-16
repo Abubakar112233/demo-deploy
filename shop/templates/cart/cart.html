@@ -44,6 +44,14 @@
 								{% for data in cart_items %}
 								{% multiplier data.product_attribute.sell_price data.qty as sell_prices%}
 								<tr>
+									
+									{% if messages %}
+    									{% for message in messages %}
+        									{% if message.tags == 'error' %}
+									<p id="error-message" style="margin-bottom: -50px; padding-top: 25px; color: red;">{{ message|safe|escape }}</p>
+											{% endif %}
+										{% endfor %}
+									{% endif %}
 									<td class="product__cart__item">
 										<div class="product__cart__item__pic">
 											<img src="/media/{{data.product_attribute.image}}" width="80px" alt="">
@@ -68,10 +76,12 @@
 												<span class="fa fa-angle-right inc qtybtn update-item" data-item="{{data.id}}"></span>
 											</div>
 										</div>
+										<p style="margin-bottom: -50px; padding-top: 25px;">Stock: {{data.product_attribute.quantity}}</p>
 									</td>		
 									<td class="cart__price">{% currency_converter user sell_prices %}</td>
 									<td class="cart__close delete-item" data-item="{{data.id}}"><i class="fa fa-close"></i></td>
 								</tr>
+								
 								{% endfor %}
 
 							{% else %}
@@ -79,6 +89,14 @@
 								{% get_obj product_id "sell_price" as sell_prices %}
 								{% multiplier sell_prices item.qty as item_total %}
 								<tr>
+									
+									{% if messages %}
+    									{% for message in messages %}
+        									{% if message.tags == 'error' %}
+									<p id="error-message" style="margin-bottom: -50px; padding-top: 25px; color: red;">{{ message|safe|escape }}</p>
+											{% endif %}
+										{% endfor %}
+									{% endif %}
 									<td class="product__cart__item">
 										<div class="product__cart__item__pic">
 											<img src="/media/{% get_obj product_id "image" %}" width="80px" alt="">
@@ -102,6 +120,7 @@
 												<span class="fa fa-angle-right inc qtybtn update-item" data-item="{{product_id}}"></span>
 											</div>
 										</div>
+										<p style="margin-bottom: -50px; padding-top: 25px;">Stock: {% get_obj product_id "quantity" %}</p>
 									</td>
 									<td class="cart__price">{% currency_converter_session request item_total %}</td>
 									<td class="cart__close delete-item" data-item="{{product_id}}"><i class="fa fa-close"></i></td>
@@ -132,7 +151,7 @@
 						<ul>
 							<li>Subtotal 
 								<span>
-									{% if request.user_isauthenticated %}
+									{% if user.is_authenticated %}
 										{% currency_converter user total_amt %}
 									{% else %}
 										{% currency_converter_session request total_amt %}
@@ -141,7 +160,7 @@
 							</li>
 							<li>Total 
 								<span>
-									{% if request.user_isauthenticated %}
+									{% if user.is_authenticated %}
 										{% currency_converter user total_amt %}
 									{% else %}
 										{% currency_converter_session request total_amt %}

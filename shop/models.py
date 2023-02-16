@@ -147,6 +147,9 @@ class Cart(models.Model):
     product_attribute=models.ForeignKey(ProductAttribute,on_delete=models.CASCADE)
     qty=models.PositiveBigIntegerField()
 
+    def __str__(self):
+        return self.product_attribute.product.title
+
 class CartOrder(models.Model):
     user=models.ForeignKey(get_user_model(),on_delete=models.CASCADE)
     total_amt=models.FloatField()
@@ -202,11 +205,24 @@ class Wishlist(models.Model):
         verbose_name_plural='Wishlist'
 
 # AddressBook
+class Countries(models.Model):
+    country_name=models.TextField()
+    delivery_price=models.FloatField(default=25.0)
+
+    def __str__(self):
+        return self.country_name
+
+# AddressBook
 class UserAddressBook(models.Model):
     user=models.ForeignKey(get_user_model(),on_delete=models.CASCADE)
+    address_name=models.CharField(max_length=1000)
+    country=models.ForeignKey(Countries, on_delete=models.CASCADE, default=1)
+    town_or_city=models.CharField(max_length=1000)
+    address=models.CharField(max_length=1000)
+    postal_code=models.IntegerField()
     mobile=models.CharField(max_length=50,null=True)
-    address=models.TextField()
     status=models.BooleanField(default=False)
 
     class Meta:
-        verbose_name_plural='AddressBook'  
+        verbose_name_plural='AddressBook' 
+

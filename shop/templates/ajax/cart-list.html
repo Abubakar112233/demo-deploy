@@ -45,6 +45,7 @@
 											<span class="fa fa-angle-right inc qtybtn update-item" data-item="{{data.id}}"></span>
 										</div>
 									</div>
+									<p style="margin-bottom: -50px; padding-top: 25px;">Stock: {{data.product_attribute.quantity}}</p>
 								</td>		
 								<td class="cart__price">{% currency_converter user sell_prices %}</td>
 								<td class="cart__close delete-item" data-item="{{data.id}}"><i class="fa fa-close"></i></td>
@@ -79,6 +80,7 @@
 											<span class="fa fa-angle-right inc qtybtn update-item" data-item="{{product_id}}"></span>
 										</div>
 									</div>
+									<p style="margin-bottom: -50px; padding-top: 25px;">Stock: {% get_obj product_id "quantity" %}</p>
 								</td>
 								<td class="cart__price">{% currency_converter_session request item_total %}</td>
 								<td class="cart__close delete-item" data-item="{{product_id}}"><i class="fa fa-close"></i></td>

@@ -127,13 +127,6 @@ $(document).ready(function(){
 		selected_product = $(this).attr('data-productid')
 	});
 
-	// set all to 0
-	$(document).on('mouseout',".get_product_id",function(){
-		selected_color=0;
-		selected_size=0;
-		selected_product = 0;
-	});
-
 	// select color
 	$(document).on('click',".choose-color",function(){
 		selected_color=$(this).attr('data-color');
@@ -142,6 +135,13 @@ $(document).ready(function(){
 	// select size
 	$(document).on('click',".choose-size",function(){
 		selected_size=$(this).attr('data-size');
+	});
+
+	// set all to 0
+	$(document).on('mouseleave',".get_product_id",function(){
+		selected_color=0;
+		selected_size=0;
+		selected_product = 0;
 	});
 
 	// Add to cart
@@ -305,6 +305,7 @@ $(document).ready(function(){
 			},
 			dataType:'json',
 			success:function(res){
+				$(".address-cost").load(location.href + " .address-cost");
 				if(res.bool==true){
 					$(".address").removeClass('shadow border-secondary');
 					$(".address"+_aId).addClass('shadow border-secondary');

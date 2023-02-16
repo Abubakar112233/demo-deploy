@@ -23,6 +23,7 @@ urlpatterns=[
     path('delete-from-cart',views.delete_cart_item,name='delete-from-cart'),
     path('update-cart',views.update_cart_item,name='update-cart'),
     path('checkout',views.checkout,name='checkout'),
+    path('create-checkout-session/', views.CreateCheckoutSessionView, name='create-checkout-session'),
     path('paypal/', include('paypal.standard.ipn.urls')),
     path('payment-done/', views.payment_done, name='payment_done'),
     path('payment-cancelled/', views.payment_canceled, name='payment_cancelled'),
