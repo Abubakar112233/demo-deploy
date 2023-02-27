@@ -16,6 +16,7 @@
 							<th>Title</th>
 							<th>Image</th>
 							<th>Price</th>
+							<th></th>
 						</tr>
 					</thead>
 					<tbody>
@@ -25,7 +26,8 @@
 							<td>
 								<img width="100" src="/media/{{wl.product.productattribute_set.first.image}}" alt="{{wl.product.title}}">
 							</td>
-							<td>{{wl.product.productattribute_set.first.price}}</td>
+							<td>{{wl.product.productattribute_set.first.sell_price}}</td>
+							<td class="cart__close delete-wishlist" data-product="{{wl.product_id}}"><i class="fa fa-close"></i></td>
 						</tr>
 						{% endfor %}
 					</tbody>

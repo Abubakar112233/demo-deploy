@@ -128,23 +128,23 @@
 									</span>
 								</h3>
 								<span style="background-color: red; padding: 5px;"><span class="product-discount-label-{{data.id}}">{{data.productattribute_set.first.discount}}</span>% off</span><br>
-								<br><h4>Stock: <span style="color: green;">{{data.productattribute_set.first.quantity}}</span></h4><br>
+								<br><h4>Stock: <span style="color: green;" class="product-stock-{{data.id}}">{{data.productattribute_set.first.quantity}}</span></h4><br>
 								
 								<p>{{data.desc}}</p>
 								<div class="product__details__option">
 									<div class="product__details__option__color" style="padding-bottom: 20px;">
 										<span>Color:</span>	
 										   {% for color in colors %}
-										<label class="choose-color" data-color="{{color.color__id}}" style="background-color: {{color.color__color_code}}" for="sp-1">
-											<input type="radio" id="">
-										</label>
-										{% endfor %}
+											<label class="choose-color" data-color="{{color.color__id}}" style="background-color: {{color.color__color_code}}" for="sp-1">
+												<input type="radio" id="">
+											</label>
+											{% endfor %}
 										<br>
 									</div>
 									<div class="product__details__option__size">	
 										<span>Size:</span>	
 										{% for size in sizes %}
-										<label class="choose-size color{{size.color__id}}" data-size="{{size.size__id}}" data-price-{{data.id}}="{% if user.is_authenticated %}{% get_price user size.price size.discount %}{% else %}{% get_price_session request size.price size.discount %}{% endif %}" data-discount-{{data.id}}="{% if user.is_authenticated %}{% get_discount_price user size.price %}{% else %}{% get_discount_price_session request size.price %}{% endif %}" data-discountlabel-{{data.id}}="{{size.discount}}" data-image-{{data.id}}="{{size.image}}" for="{{size.size__size_code}}">{{size.size__size_code}}
+										<label class="choose-size color{{size.color__id}}" data-size="{{size.size__id}}" data-price-{{data.id}}="{% if user.is_authenticated %}{% get_price user size.price size.discount %}{% else %}{% get_price_session request size.price size.discount %}{% endif %}" data-discount-{{data.id}}="{% if user.is_authenticated %}{% get_discount_price user size.price %}{% else %}{% get_discount_price_session request size.price %}{% endif %}" data-discountlabel-{{data.id}}="{{size.discount}}" data-image-{{data.id}}="{{size.image}}" data-stock-{{data.id}}="{{size.quantity}}" for="{{size.size__size_code}}">{{size.size__size_code}}
 											<input class="cccl" type="radio" id="{{size.size__size_code}}">
 										</label>
 										{% endfor %}

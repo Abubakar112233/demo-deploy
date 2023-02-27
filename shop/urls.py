@@ -25,6 +25,7 @@ urlpatterns=[
     path('checkout',views.checkout,name='checkout'),
     path('create-checkout-session/', views.CreateCheckoutSessionView, name='create-checkout-session'),
     path('paypal/', include('paypal.standard.ipn.urls')),
+    path('payment-processing/', views.payment_processing, name='payment_processing'),
     path('payment-done/', views.payment_done, name='payment_done'),
     path('payment-cancelled/', views.payment_canceled, name='payment_cancelled'),
     path('save-review/<int:pid>',views.save_review, name='save-review'),
@@ -40,9 +41,11 @@ urlpatterns=[
 
     # Wishlist
     path('add-wishlist',views.add_wishlist, name='add_wishlist'),
+    path('delete-wishlist',views.delete_wishlist, name='delete_wishlist'),
     path('my-wishlist',views.my_wishlist, name='my_wishlist'),
     # My Reviews
     path('my-reviews',views.my_reviews, name='my-reviews'),
+    path('delete-review',views.delete_review, name='delete-review'),
     # My AddressBook
     path('my-addressbook',views.my_addressbook, name='my-addressbook'),
     path('add-address',views.save_address, name='add-address'),

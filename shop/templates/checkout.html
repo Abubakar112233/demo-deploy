@@ -74,8 +74,8 @@
 							<div class="checkout__order__products">Product <span>Total</span><span>Price</span><span>Qty</span></div>
 							<ul class="checkout__total__products">
 								{% for item in cart_items %}
-								{% multiplier item.product_attribute.price item.qty as sell_prices %}
-								<li>0{{forloop.counter}}. {{item.product_attribute.product.title}} - {{item.product_attribute.color}} - {{item.product_attribute.size.size_code}}<span>{% currency_converter user sell_prices %}</span><span>{% currency_converter user item.product_attribute.price %}</span><span>{{item.qty}}</span></li>
+								{% multiplier item.product_attribute.sell_price item.qty as sell_prices %}
+								<li>0{{forloop.counter}}. {{item.product_attribute.product.title}} - {{item.product_attribute.color}} - {{item.product_attribute.size.size_code}}<span>{% currency_converter user sell_prices %}</span><span>{% currency_converter user item.product_attribute.sell_price %}</span><span>{{item.qty}}</span></li>
 								{% endfor %}
 							</ul>
 							<ul class="checkout__total__all">

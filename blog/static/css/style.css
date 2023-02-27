@@ -33,7 +33,7 @@
 html,
 body {
 	height: 100%;
-	font-family: "Nunito Sans", sans-serif;
+	font-family: "Helvectica", sans-serif;
 	-webkit-font-smoothing: antialiased;
 }
 
@@ -46,7 +46,7 @@ h6 {
 	margin: 0;
 	color: #111111;
 	font-weight: 400;
-	font-family: "Nunito Sans", sans-serif;
+	font-family: "Helvectica", sans-serif;
 }
 
 h1 {
@@ -3025,19 +3025,21 @@ ol {
 	border-radius: 50%;
 	line-height: 46px;
 	text-align: center;
-	background: #4267b2;
+	background: green;
 }
 
 .blog__details__share ul li a.twitter {
 	background: #1da1f2;
 }
-
-.blog__details__share ul li a.youtube {
-	background: #fe0003;
+.blog__details__share ul li a.facebook {
+	background: #4267b2;
 }
 
 .blog__details__share ul li a.linkedin {
 	background: #0173b2;
+}
+.blog__details__share ul li a.instagram {
+	background: #d62976;
 }
 
 .blog__details__text {

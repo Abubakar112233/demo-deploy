@@ -959,7 +959,7 @@ ol {
 	opacity: 1;
 }
 
-.product__item:hover .product__item__text a {
+.product__item:hover .product__item__text button {
 	top: 22px;
 	opacity: 1;
 	visibility: visible;
@@ -1055,18 +1055,22 @@ ol {
 	position: relative;
 }
 
-.product__item__text a {
+.product__item__text button {
 	font-size: 15px;
 	color: #e53637;
 	font-weight: 700;
 	position: absolute;
 	left: 0;
 	top: 0;
+	bottom: 50px;
 	opacity: 0;
 	visibility: hidden;
 	-webkit-transition: all, 0.3s;
 	-o-transition: all, 0.3s;
 	transition: all, 0.3s;
+	background-color: transparent;
+	border: 0px;
+	padding: 0px;
 }
 
 .product__item__text h6 {
@@ -1108,26 +1112,36 @@ ol {
 	display: inline-block;
 	height: 12px;
 	width: 12px;
-	background: #5e64d1;
 	border-radius: 50%;
 	margin-bottom: 0;
 	margin-right: 5px;
 	position: relative;
 	cursor: pointer;
 }
-
-.product__item__text .product__color__select label.black {
-	background: #404a47;
-}
-
-.product__item__text .product__color__select label.grey {
-	background: #d5a667;
+.product__item__text .product__color__select .product__size__select label {
+	display: inline-block;
+	height: 12px;
+	width: 12px;
+	margin-right: 5px;
+	position: relative;
+	cursor: pointer;
 }
 
 .product__item__text .product__color__select label.active:after {
 	opacity: 1;
 }
 
+.product__item__text .product__color__select label:after {
+	position: absolute;
+	left: -3px;
+	top: -3px;
+	height: 18px;
+	width: 18px;
+	border: 1px solid #b9b9b9;
+	content: "";
+	border-radius: 50%;
+	opacity: 0;
+}
 .product__item__text .product__color__select label:after {
 	position: absolute;
 	left: -3px;
@@ -1505,13 +1519,16 @@ ol {
 .product__details__pic {
 	text-align: center;
 	background: #f3f2ee;
-	padding: 40px 0 60px;
+	padding: 4px 0 0px;
 	margin-bottom: 100px;
 }
 
 .product__details__pic .nav-tabs {
+	display: flex;
+	justify-content: center;
 	border-bottom: none;
-	width: 105px;
+	width: 100%;
+	margin: 0;
 }
 
 .product__details__pic .nav-tabs .nav-item {
@@ -1607,7 +1624,7 @@ ol {
 }
 
 .product__details__text {
-	text-align: center;
+	text-align: left;
 }
 
 .product__details__text h4 {
@@ -1637,14 +1654,6 @@ ol {
 	color: #0d0d0d;
 	font-weight: 700;
 	margin-bottom: 16px;
-}
-
-.product__details__text h3 span {
-	color: #b7b7b7;
-	font-size: 20px;
-	font-weight: 400;
-	margin-left: 10px;
-	text-decoration: line-through;
 }
 
 .product__details__text p {
@@ -1797,7 +1806,9 @@ ol {
 	margin-bottom: 40px;
 }
 
-.product__details__btns__option a {
+.product__details__btns__option button {
+	border: 0px;
+	background-color: transparent;
 	display: inline-block;
 	font-size: 13px;
 	color: #3d3d3d;
@@ -1807,7 +1818,7 @@ ol {
 	margin-right: 20px;
 }
 
-.product__details__btns__option a:last-child {
+.product__details__btns__option button:last-child {
 	margin-right: 0;
 }
 
@@ -1821,21 +1832,9 @@ ol {
 
 .product__details__last__option h5 span {
 	background: #ffffff;
-	padding: 0 30px;
+	padding: 0 0px;
 }
 
-.product__details__last__option h5:before {
-	position: absolute;
-	left: 0;
-	right: 0;
-	top: 10px;
-	height: 1px;
-	width: 460px;
-	background: #e5e5e5;
-	content: "";
-	z-index: -1;
-	margin: 0 auto;
-}
 
 .product__details__last__option ul {
 	padding-top: 40px;
@@ -2057,6 +2056,7 @@ ol {
 .breadcrumb-option {
 	background: #f3f2ee;
 	padding: 40px 0;
+	padding-top: 70px;
 }
 
 .breadcrumb__text h4 {
@@ -2330,7 +2330,7 @@ ol {
 }
 
 .shopping__cart__table table tbody tr td.product__cart__item {
-	width: 200px;
+	width: 250px;
 }
 
 .shopping__cart__table table tbody tr td.product__cart__item .product__cart__item__pic {
@@ -2356,7 +2356,7 @@ ol {
 }
 
 .shopping__cart__table table tbody tr td.quantity__item {
-	width: 175px;
+	width: 125px;
 }
 
 .shopping__cart__table table tbody tr td.quantity__item .quantity .pro-qty-2 {
@@ -2382,7 +2382,7 @@ ol {
 	color: #111111;
 	font-size: 18px;
 	font-weight: 700;
-	width: 140px;
+	width: 100px;
 }
 
 .shopping__cart__table table tbody tr td.cart__close i {
@@ -2521,12 +2521,13 @@ ol {
 -----------------------*/
 
 .coupon__code {
+	margin-top: -70px;
 	color: #0d0d0d;
 	font-size: 14px;
 	border-top: 2px solid #77b527;
 	background: #f5f5f5;
 	padding: 23px 30px 18px;
-	margin-bottom: 50px;
+	margin-bottom: 20px;
 }
 
 .coupon__code span {
@@ -2670,6 +2671,16 @@ ol {
 	margin-top: 8px;
 }
 
+.checkout__order a {
+	color: white;
+	text-align: center;
+}
+.checkout__order a:hover{
+	color: white;
+	text-align: center;
+	cursor: pointer;
+}
+
 .checkout__order__products {
 	font-size: 16px;
 	color: #111111;
@@ -2679,6 +2690,7 @@ ol {
 
 .checkout__order__products span {
 	float: right;
+	padding-left: 80px;
 }
 
 .checkout__total__products {
@@ -2699,8 +2711,10 @@ ol {
 }
 
 .checkout__total__products li span {
+	text-align: center;
 	color: #111111;
 	float: right;
+	padding-left: 60px;
 }
 
 .checkout__total__all {
@@ -3011,19 +3025,21 @@ ol {
 	border-radius: 50%;
 	line-height: 46px;
 	text-align: center;
-	background: #4267b2;
+	background: green;
 }
 
 .blog__details__share ul li a.twitter {
 	background: #1da1f2;
 }
-
-.blog__details__share ul li a.youtube {
-	background: #fe0003;
+.blog__details__share ul li a.facebook {
+	background: #4267b2;
 }
 
 .blog__details__share ul li a.linkedin {
 	background: #0173b2;
+}
+.blog__details__share ul li a.instagram {
+	background: #d62976;
 }
 
 .blog__details__text {

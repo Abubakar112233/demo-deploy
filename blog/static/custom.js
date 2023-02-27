@@ -71,16 +71,18 @@ $(document).ready(function(){
 
 		$(".choose-size").hide();
 		$(".color"+_color).show();
-		$(".color"+_color).first().addClass('active');
+		//$(".color"+_color).first().addClass('active');
 
 		var _price=$(".color"+_color).first().attr('data-price-'+selected_product);
 		var _discount=$(".color"+_color).first().attr('data-discount-'+selected_product);
 		var _discountlabel=$(".color"+_color).first().attr('data-discountlabel-'+selected_product);
+		var _stock=$(".color"+_color).first().attr('data-stock-'+selected_product);
 		var _image="/media/" + $(".color"+_color).first().attr('data-image-'+selected_product);
 		$(".product-image-"+selected_product).attr('src',_image);
 		$(".product-discount-"+selected_product).text(_discount);
 		$(".product-discount-label-"+selected_product).text(_discountlabel);
 		$(".product-price-"+selected_product).text(_price);
+		$(".product-stock-"+selected_product).text(_stock);
 		$(".product-home-image-"+selected_product).css("background-image","url(" + _image + ")");
 
 	});
@@ -94,27 +96,31 @@ $(document).ready(function(){
 		var _price=$(this).attr('data-price-'+selected_product);
 		var _discount=$(this).attr('data-discount-'+selected_product);
 		var _discountlabel=$(this).attr('data-discountlabel-'+selected_product);
+		var _stock=$(this).attr('data-stock-'+selected_product);
 		var _image="/media/" + $(this).attr('data-image-'+selected_product);
 		$(".product-image-"+selected_product).attr('src',_image);
 		$(".product-discount-"+selected_product).text(_discount);
 		$(".product-discount-label-"+selected_product).text(_discountlabel);
+		$(".product-stock-"+selected_product).text(_stock);
 		$(".product-price-"+selected_product).text(_price);
 	})
 	// End
 
 	// Show the first selected color
-	$(".choose-color").first().addClass('focused');
+	// $(".choose-color").first().addClass('focused');
 	var _color=$(".choose-color").first().attr('data-color');
 	var _price=$(".choose-size").first().attr('data-price-'+selected_product);
 	var _discount=$(".choose-size").first().attr('data-discount-'+selected_product);
-	var _discountlabel=$(this).attr('data-discountlabel-'+selected_product);
+	var _discountlabel=$(".choose-size").first().attr('data-discountlabel-'+selected_product);
+	var _stock=$(".color"+_color).first().attr('data-stock-'+selected_product);
 	var _image="/media/" + $(".choose-size").first().attr('data-image-'+selected_product);
 
 	$(".color"+_color).show();
-	$(".color"+_color).first().addClass('active');
+	// $(".color"+_color).first().addClass('active');
 	$(".product-discount-"+selected_product).text(_discount);
 	$(".product-discount-label-"+selected_product).text(_discountlabel);
 	$(".product-price-"+selected_product).text(_price);
+	$(".product-stock-"+selected_product).text(_stock);
 	$(".product-image-"+selected_product).attr('src',_image);
 	$(".product-home-image-"+selected_product).css("background-image","url(" + _image + ")");
 
@@ -293,6 +299,27 @@ $(document).ready(function(){
 	});
 	// End
 
+	// Delete wishlist
+	$(document).on('click',".delete-wishlist",function(){
+		var _pid=$(this).attr('data-product');
+		var _vm=$(this);
+		// Ajax
+		$.ajax({
+			url:"/delete-wishlist",
+			data:{
+				product:_pid
+			},
+			dataType:'json',
+			success:function(res){
+			}
+		});
+		// EndAjax
+		$(document).ajaxStop(function(){
+			window.location.reload();
+		});
+	});
+	// End
+
 	// Activate selected address
 	$(document).on('click','.activate-address',function(){
 		var _aId=$(this).attr('data-address');
@@ -366,5 +393,26 @@ $("#addForm").submit(function(e){
 		}
 	});
 	e.preventDefault();
+});
+// End
+
+// delete Review
+$(document).on('click',".delete-review",function(){
+	var _pid=$(this).attr('data-review');
+	var _vm=$(this);
+	// Ajax
+	$.ajax({
+		url:"/delete-review",
+		data:{
+			review:_pid
+		},
+		dataType:'json',
+		success:function(res){
+		}
+	});
+	// EndAjax
+	$(document).ajaxStop(function(){
+		window.location.reload();
+	});
 });
 // End

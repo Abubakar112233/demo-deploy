@@ -86,8 +86,8 @@ def brand_product_list(request,brand_id):
 def product_detail(request,slug,id):
 	product=Product.objects.get(id=id)
 	related_products=Product.objects.filter(category=product.category).exclude(id=id)[:4]
-	colors=ProductAttribute.objects.filter(product=product).filter(quantity__gt=0).values('color__id','color__title','color__color_code').distinct()
-	sizes=ProductAttribute.objects.filter(product=product).filter(quantity__gt=0).values('size__id','size__title','size__size_code','price','discount','color__id','image').distinct()
+	colors=ProductAttribute.objects.filter(product=product).filter(quantity__gt=0).values('color__id','color__title','color__color_code','quantity').distinct()
+	sizes=ProductAttribute.objects.filter(product=product).filter(quantity__gt=0).values('size__id','size__title','size__size_code','price','discount','color__id','image','quantity').distinct()
 	product_pictures=ProductPicture.objects.filter(Product=product)
 	product_tags=ProductTag.objects.filter(product=product)
 	reviewForm=ReviewAdd()
@@ -393,102 +393,109 @@ def update_cart_item(request):
 @login_required
 def checkout(request):
 	addbook=UserAddressBook.objects.filter(user=request.user).order_by('-id')
-	address_cost=UserAddressBook.objects.filter(user=request.user).filter(status=True)[0].country.delivery_price
 	user=request.user
 	cart_items=Cart.objects.filter(user=user)
 	total_amt=0
 	totalAmt=0
 	for item in cart_items: 
 		total_amt+=item.qty*item.product_attribute.sell_price
-
-	# Process Payment
-	total_amts=total_amt+address_cost
-	host = request.get_host()
-	paypal_dict = {
-		'business': settings.PAYPAL_RECEIVER_EMAIL,
-		'amount': total_amt,
-		'item_name': 'OrderNo-'+str("order.id"),
-		'invoice': 'INV-'+str("order.id"),
-		'currency_code': 'USD',
-		'notify_url': 'http://{}{}'.format(host,reverse('paypal-ipn')),
-		'return_url': 'http://{}{}'.format(host,reverse('payment_done')),
-		'cancel_return': 'http://{}{}'.format(host,reverse('payment_cancelled')),
-	}
-	form = PayPalPaymentsForm(initial=paypal_dict)
+	
+	shipping_cost = 0
+	if total_amt >= 1115:
+		shipping_cost = 0
+	else: 
+		if not UserAddressBook.objects.filter(user=request.user).filter(status=True):
+			shipping_cost=0
+		else:
+			shipping_cost = UserAddressBook.objects.filter(user=request.user).filter(status=True)[0].country.delivery_price
+	total_amts=total_amt+shipping_cost
+	
 	address=UserAddressBook.objects.filter(user=request.user,status=True).first()
-	return render(request, 'checkout.html',{'total_amt':total_amt,'form':form,'address':address,'cart_items':cart_items,'addbook':addbook, 'address_cost':address_cost,'total_amts':total_amts})
+
+	return render(request, 'checkout.html',{'total_amt':total_amt,'address':address,'cart_items':cart_items,'addbook':addbook, 'address_cost':shipping_cost,'total_amts':total_amts})
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
 def CreateCheckoutSessionView(request):
-	user=request.user
-	cart_items = Cart.objects.filter(user=user)
-	selected_currency = CustomUser.objects.get(username=user).currency
+	if not UserAddressBook.objects.filter(user=request.user).filter(status=True):
+		messages.error(request, "Please Create or select and address")
+		return redirect(checkout)
+	else:
+		user=request.user
+		cart_items = Cart.objects.filter(user=user)
+		selected_currency = CustomUser.objects.get(username=user).currency
 
-	for items in cart_items:
-		if items.qty > items.product_attribute.quantity:
-			messages.error(request, "Available Product quantity is less than selected quantity. Please check and refresh")
-			return redirect(cart_list)
-		else:
-			total_amt=0
-			for item in cart_items: 
-				total_amt+=item.qty*item.product_attribute.sell_price
+		for items in cart_items:
+			if items.qty > items.product_attribute.quantity:
+				messages.error(request, "Available Product quantity is less than selected quantity. Please check and refresh")
+				return redirect(cart_list)
+			else:
+				total_amt=0
+				for item in cart_items: 
+					total_amt+=item.qty*item.product_attribute.sell_price
 
-			shipping_cost = 25
-			if total_amt > 1115:
 				shipping_cost = 0
-			else: 
-				shipping_cost = int(UserAddressBook.objects.filter(user=request.user).filter(status=True)[0].country.delivery_price * 100)
+				if total_amt >= 1115:
+					shipping_cost = 0
+				else: 
+					shipping_cost = int(UserAddressBook.objects.filter(user=request.user).filter(status=True)[0].country.delivery_price * 100)
 
-			line_items_list = []
-			for items in cart_items:
-				converted_price = int(items.product_attribute.price * selected_currency.currency_price * 100)
+				line_items_list = []
+				for items in cart_items:
+					converted_price = int(items.product_attribute.sell_price * selected_currency.currency_price * 100)
+					line_items_list.append({
+						'price_data': {
+							'currency': selected_currency.currency_short_name, 
+							'product_data': {
+								'name': str(items.product_attribute.product.title) + " - " + str(items.product_attribute.color) + " - " + str(items.product_attribute.size.size_code),
+							}, 
+							'unit_amount': converted_price
+						},
+						'quantity': items.qty, 
+					})	
 				line_items_list.append({
-					'price_data': {
-						'currency': selected_currency.currency_short_name, 
-						'product_data': {
-							'name': str(items.product_attribute.product.title) + " - " + str(items.product_attribute.color) + " - " + str(items.product_attribute.size.size_code),
-						}, 
-						'unit_amount': converted_price
-					},
-					'quantity': items.qty, 
-				})	
-			line_items_list.append({
-					'price_data': {
-						'currency': selected_currency.currency_short_name, 
-						'product_data': {
-							'name': "Shipping Cost",
-						}, 
-						'unit_amount': shipping_cost
-					},
-					'quantity': 1, 
-				})						 
-			
-			domain = "http://127.0.0.1:8000"
-			if settings.DEBUG:
+						'price_data': {
+							'currency': selected_currency.currency_short_name, 
+							'product_data': {
+								'name': "Shipping Cost",
+							}, 
+							'unit_amount': shipping_cost
+						},
+						'quantity': 1, 
+					})						 
+				
 				domain = "http://127.0.0.1:8000"
-			checkout_session = stripe.checkout.Session.create(
-				payment_method_types=['card'],
-				line_items=line_items_list,
-				mode='payment',
-				success_url=domain + '/payment-done/',
-				cancel_url=domain + '/payment-cancelled/',
-			)
-			return redirect(checkout_session.url)
+				if settings.DEBUG:
+					domain = "http://127.0.0.1:8000"
+				checkout_session = stripe.checkout.Session.create(
+					payment_method_types=['card'],
+					line_items=line_items_list,
+					mode='payment',
+					success_url=domain + '/payment-processing/',
+					cancel_url=domain + '/payment-cancelled/',
+				)
+				return redirect(checkout_session.url)
 
-
-@csrf_exempt
-def payment_done(request):
+@login_required
+def payment_processing(request):
 	user=request.user
 	cart_items = Cart.objects.filter(user=user)
 	total_amt=0
 	for item in cart_items: 
 		total_amt+=item.qty*item.product_attribute.sell_price
+	
+	shipping_cost = 25
+	if total_amt > 1115:
+		shipping_cost = 0
+	else: 
+		shipping_cost = UserAddressBook.objects.filter(user=request.user).filter(status=True)[0].country.delivery_price
 	# Order
 	order=CartOrder.objects.create(
 			user=request.user,
-			total_amt=total_amt,
-			paid_status=True
+			total_amt=total_amt+shipping_cost,
+			address=UserAddressBook.objects.filter(user=request.user).filter(status=True)[0],
+			paid_status=True,
+
 		)
 	# End
 	for item in cart_items: 
@@ -503,13 +510,16 @@ def payment_done(request):
 			item=item.product_attribute.product.title,
 			image=item.product_attribute.image,
 			qty=item.qty,
-			price=item.product_attribute.sell_price,
+			price=item.product_attribute.sell_price + shipping_cost,
 			total=float(item.qty)*item.product_attribute.sell_price
 			)
 		# End
 	cart_items.delete()
-	returnData=request.POST
-	return render(request, 'payment-success.html',{'data':returnData})
+	return redirect(payment_done)
+
+@csrf_exempt
+def payment_done(request):
+	return render(request, 'payment-success.html')
 
 
 @csrf_exempt
@@ -553,7 +563,7 @@ def contact(request):
 			message = "\n".join(body.values())
 
 			try:
-				send_mail(subject, message, 'abubakarlawan112@gmail.com', ['abubakarlawan112@gmail.com']) 
+				send_mail(subject, message, 'Appareltheteam@gmail.com', ['Appareltheteam@gmail.com']) 
 				messages.success(request, "Message Sent Successfully. Will get back to you shortly")
 			except BadHeaderError:
 				return HttpResponse('Invalid header found.')
@@ -606,6 +616,14 @@ def add_wishlist(request):
 		}
 	return JsonResponse(data)
 
+# Wishlist
+def delete_wishlist(request):
+	pid=request.GET['product']
+	product=Product.objects.get(pk=pid)
+	product.delete()
+	messages.success(request, "Item removed from Wishlist")
+	return JsonResponse()
+
 # My Wishlist
 def my_wishlist(request):
 	wlist=Wishlist.objects.filter(user=request.user).order_by('-id')
@@ -615,6 +633,14 @@ def my_wishlist(request):
 def my_reviews(request):
 	reviews=ProductReview.objects.filter(user=request.user).order_by('-id')
 	return render(request, 'user/reviews.html',{'reviews':reviews})
+
+# Delete review
+def delete_review(request):
+	rid=request.GET['review']
+	review=ProductReview.objects.get(pk=rid)
+	review.delete()
+	messages.success(request, "Review Deleted")
+	return JsonResponse()
 
 # My AddressBook
 def my_addressbook(request):

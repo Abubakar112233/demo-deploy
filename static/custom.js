@@ -1,4 +1,6 @@
 $(document).ready(function(){
+	var _vm=$(this);
+	var _index=_vm.attr('data-index');
 	$("#loadMore").on('click',function(){
 		var _currentProducts=$(".product-box").length;
 		var _limit=$(this).attr('data-limit');
@@ -29,6 +31,33 @@ $(document).ready(function(){
 		// End
 	});
 
+	// change currency
+	$(".choose-currency").on('click',function(){
+		var _selected_currency=$(this).attr('data-currency');
+
+		// Ajax
+		$.ajax({
+			url:'/change-currency',
+			data:{
+				'id':_selected_currency
+			},
+			dataType:'json',
+			beforeSend:function(){
+				_vm.attr('disabled',true);
+			},
+			success:function(res){
+				_vm.attr('disabled',false);
+			}
+		});
+		// End 
+		
+		$(document).ajaxStop(function(){
+			window.location.reload();
+		});
+
+	});
+	// End
+
 	// Product Variation
 	$(".choose-size").hide();
 
@@ -42,14 +71,19 @@ $(document).ready(function(){
 
 		$(".choose-size").hide();
 		$(".color"+_color).show();
-		$(".color"+_color).first().addClass('active');
+		//$(".color"+_color).first().addClass('active');
 
-		var _price=$(".color"+_color).first().attr('data-price');
-		var _discount=_price - $(".color"+_color).first().attr('data-discount');
-		var _image="/media/" + $(".color"+_color).first().attr('data-image');
-		$(".product-image").attr('src',_image);
-		$(".product-discount").text(_discount);
-		$(".product-price").text(_price);
+		var _price=$(".color"+_color).first().attr('data-price-'+selected_product);
+		var _discount=$(".color"+_color).first().attr('data-discount-'+selected_product);
+		var _discountlabel=$(".color"+_color).first().attr('data-discountlabel-'+selected_product);
+		var _stock=$(".color"+_color).first().attr('data-stock-'+selected_product);
+		var _image="/media/" + $(".color"+_color).first().attr('data-image-'+selected_product);
+		$(".product-image-"+selected_product).attr('src',_image);
+		$(".product-discount-"+selected_product).text(_discount);
+		$(".product-discount-label-"+selected_product).text(_discountlabel);
+		$(".product-price-"+selected_product).text(_price);
+		$(".product-stock-"+selected_product).text(_stock);
+		$(".product-home-image-"+selected_product).css("background-image","url(" + _image + ")");
 
 	});
 	// End
@@ -59,33 +93,44 @@ $(document).ready(function(){
 		$(".choose-size").removeClass('active');
 		$(this).addClass('active');
 
-		var _price=$(this).attr('data-price');
-		var _discount=_price - $(this).attr('data-discount');
-		var _image="/media/" + $(this).attr('data-image');
-		$(".product-image").attr('src',_image);
-		$(".product-discount").text(_discount);
-		$(".product-price").text(_price);
+		var _price=$(this).attr('data-price-'+selected_product);
+		var _discount=$(this).attr('data-discount-'+selected_product);
+		var _discountlabel=$(this).attr('data-discountlabel-'+selected_product);
+		var _stock=$(".color"+_color).first().attr('data-stock-'+selected_product);
+		var _image="/media/" + $(this).attr('data-image-'+selected_product);
+		$(".product-image-"+selected_product).attr('src',_image);
+		$(".product-discount-"+selected_product).text(_discount);
+		$(".product-discount-label-"+selected_product).text(_discountlabel);
+		$(".product-stock-"+selected_product).text(_stock);
+		$(".product-price-"+selected_product).text(_price);
 	})
 	// End
 
 	// Show the first selected color
-	$(".choose-color").first().addClass('focused');
+	// $(".choose-color").first().addClass('focused');
 	var _color=$(".choose-color").first().attr('data-color');
-	var _price=$(".choose-size").first().attr('data-price');
-	var _discount=_price - $(".choose-size").first().attr('data-discount');
-	var _image="/media/" + $(".choose-size").first().attr('data-image');
+	var _price=$(".choose-size").first().attr('data-price-'+selected_product);
+	var _discount=$(".choose-size").first().attr('data-discount-'+selected_product);
+	var _discountlabel=$(this).attr('data-discountlabel-'+selected_product);
+	var _stock=$(".color"+_color).first().attr('data-stock-'+selected_product);
+	var _image="/media/" + $(".choose-size").first().attr('data-image-'+selected_product);
 
 	$(".color"+_color).show();
-	$(".color"+_color).first().addClass('active');
-	$(".product-discount").text(_discount);
-	$(".product-price").text(_price);
-	$(".product-image").attr('src',_image);
+	// $(".color"+_color).first().addClass('active');
+	$(".product-discount-"+selected_product).text(_discount);
+	$(".product-discount-label-"+selected_product).text(_discountlabel);
+	$(".product-price-"+selected_product).text(_price);
+	$(".product-stock-"+selected_product).text(_stock);
+	$(".product-image-"+selected_product).attr('src',_image);
+	$(".product-home-image-"+selected_product).css("background-image","url(" + _image + ")");
 
 	var selected_color=0;
 	var selected_size=0;
+	var selected_product = 0;
 
-	// reset to 0 on hover
-	$(document).on('mouseleave',".product__item",function(){
+	// get product id
+	$(document).on('mouseover',".get_product_id",function(){
+		selected_product = $(this).attr('data-productid')
 	});
 
 	// select color
@@ -98,6 +143,13 @@ $(document).ready(function(){
 		selected_size=$(this).attr('data-size');
 	});
 
+	// set all to 0
+	$(document).on('mouseleave',".get_product_id",function(){
+		selected_color=0;
+		selected_size=0;
+		selected_product = 0;
+	});
+
 	// Add to cart
 	$(document).on('click',".add-to-cart",function(){
 		if(selected_color == 0 || selected_size == 0){
@@ -107,7 +159,7 @@ $(document).ready(function(){
 			var _index=_vm.attr('data-index');
 			var _qty=$(".product-qty-"+_index).val();
 			var _selectedColor=selected_color;
-			var _selectedSize=selected_color;
+			var _selectedSize=selected_size;
 			var _productId=$(".product-id-"+_index).val();
 			var _productImage=$(".product-image-"+_index).val();
 			var _productTitle=$(".product-title-"+_index).val();
@@ -134,7 +186,39 @@ $(document).ready(function(){
 				}
 			});
 			// End
+			$(document).ajaxStop(function(){
+				window.location.reload();
+			});
 		}
+	});
+	// End
+
+	// Add to cart attribute
+	$(document).on('click',".add-to-cart-attribute",function(){
+		var _vm=$(this);
+		var _index=_vm.attr('data-index');
+		var _qty=$(".product-qty-"+_index).val();
+		var _productId=$(".product-id-"+_index).val();
+		// Ajax
+		$.ajax({
+			url:'/add-to-cart-attribute',
+			data:{
+				'id':_productId,
+				'qty':_qty,
+			},
+			dataType:'json',
+			beforeSend:function(){
+				_vm.attr('disabled',true);
+			},
+			success:function(res){
+				$(".cart-list").text(res.totalitems);
+				_vm.attr('disabled',false);
+			}
+		});
+		// End
+		$(document).ajaxStop(function(){
+			window.location.reload();
+		});
 	});
 	// End
 
@@ -159,6 +243,11 @@ $(document).ready(function(){
 			}
 		});
 		// End
+		
+		// EndAjax
+		$(document).ajaxStop(function(){
+			window.location.reload();
+		});
 	});
 
 	// Update item from cart
@@ -204,6 +293,30 @@ $(document).ready(function(){
 			}
 		});
 		// EndAjax
+		$(document).ajaxStop(function(){
+			window.location.reload();
+		});
+	});
+	// End
+
+	// Delete wishlist
+	$(document).on('click',".delete-wishlist",function(){
+		var _pid=$(this).attr('data-product');
+		var _vm=$(this);
+		// Ajax
+		$.ajax({
+			url:"/delete-wishlist",
+			data:{
+				product:_pid
+			},
+			dataType:'json',
+			success:function(res){
+			}
+		});
+		// EndAjax
+		$(document).ajaxStop(function(){
+			window.location.reload();
+		});
 	});
 	// End
 
@@ -219,6 +332,7 @@ $(document).ready(function(){
 			},
 			dataType:'json',
 			success:function(res){
+				$(".address-cost").load(location.href + " .address-cost");
 				if(res.bool==true){
 					$(".address").removeClass('shadow border-secondary');
 					$(".address"+_aId).addClass('shadow border-secondary');
@@ -279,5 +393,26 @@ $("#addForm").submit(function(e){
 		}
 	});
 	e.preventDefault();
+});
+// End
+
+// delete Review
+$(document).on('click',".delete-review",function(){
+	var _pid=$(this).attr('data-review');
+	var _vm=$(this);
+	// Ajax
+	$.ajax({
+		url:"/delete-review",
+		data:{
+			review:_pid
+		},
+		dataType:'json',
+		success:function(res){
+		}
+	});
+	// EndAjax
+	$(document).ajaxStop(function(){
+		window.location.reload();
+	});
 });
 // End

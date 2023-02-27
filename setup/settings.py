@@ -30,6 +30,7 @@ SECRET_KEY = 'django-insecure-x=42aclu%h3bi&0!p=bfv=i=4q7a-&47%3=mk%bj(aa#7%fr@$
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
+#CSRF_TRUSTED_ORIGINS = ['http127.0.0.1:8000']
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 # Application definition
@@ -37,6 +38,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static/')
 INSTALLED_APPS = [
     'jet.dashboard',
     'jet',
+    'nested_admin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -59,6 +61,39 @@ INSTALLED_APPS = [
     'paypal.standard.ipn'
 ]
 
+JET_THEMES = [
+    {
+        'theme': 'default', # theme folder name
+        'color': '#47bac1', # color of the theme's button in user menu
+        'title': 'Default' # theme title
+    },
+    {
+        'theme': 'green',
+        'color': '#44b78b',
+        'title': 'Green'
+    },
+    {
+        'theme': 'light-green',
+        'color': '#2faa60',
+        'title': 'Light Green'
+    },
+    {
+        'theme': 'light-violet',
+        'color': '#a464c4',
+        'title': 'Light Violet'
+    },
+    {
+        'theme': 'light-blue',
+        'color': '#5EADDE',
+        'title': 'Light Blue'
+    },
+    {
+        'theme': 'light-gray',
+        'color': '#222',
+        'title': 'Light Gray'
+    }
+]
+
 SITE_ID = 2
 SOCIALACCOUNT_LOGIN_ON_GET=True
 
@@ -75,7 +110,6 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'setup.urls'
-
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -166,8 +200,8 @@ SOCIALACCOUNT_PROVIDERS = {
     }
 }
 
-RECAPTCHA_PUBLIC_KEY = '6LddA3kgAAAAAPf1mAJmEc7Ku0cssbD5QMha09NT'
-RECAPTCHA_PRIVATE_KEY = '6LddA3kgAAAAAJY-2-Q0J3QX83DFJwFR1hXqmN8q'
+RECAPTCHA_PUBLIC_KEY = '6LcB3Z4kAAAAAJtMyhN1nvNnJi5gl0iQh8Ke8URb'
+RECAPTCHA_PRIVATE_KEY = '6LcB3Z4kAAAAAE6bgRCmIqFux-IMTJ80v-q9dN-m'
 SILENCED_SYSTEM_CHECKS = ['captcha.recaptcha_test_key_error']
 
 # Default primary key field type

@@ -15,7 +15,9 @@
 						<tr>
 							<th>OrderNo</th>
 							<th>Total Amt</th>
-							<th>Status</th>
+							<th>Address</th>
+							<th>Payment Status</th>
+							<th>Order Status</th>
 							<th>Order Time</th>
 						</tr>
 					</thead>
@@ -24,7 +26,9 @@
 						<tr>
 							<td><a href="{% url 'my_order_items' order.id %}" class="btn btn-sm btn-dark">{{order.id}}</a></td>
 							<td>{{order.total_amt}}</td>
+							<td>{{order.address}}</td>
 							<td>{{order.paid_status}}</td>
+							<td>{{order.order_status}}</td>
 							<td>{{order.order_dt}}</td>
 						</tr>
 						{% endfor %}

@@ -25,10 +25,14 @@ urlpatterns = [
     path('',include('blog.urls')),
     path('jet/', include('jet.urls', 'jet')),
     path('jet/dashboard/', include('jet.dashboard.urls', 'jet-dashboard')),
+    path('_nested_admin/', include('nested_admin.urls')),
     path('admin/', admin.site.urls),
     path('tinymce/', include('tinymce.urls')),
     path('', include("allauth.urls")),
 ]
+admin.site.site_header  =  "The Team Apparel"  
+admin.site.site_title  =  "The Team Apparel site"
+admin.site.index_title  =  "The Team Apparel"
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

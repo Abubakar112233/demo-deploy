@@ -6,7 +6,6 @@ from django import forms
 admin.site.register(Brand)
 admin.site.register(Size)
 
-
 class BannerAdmin(admin.ModelAdmin):
 	list_display=('alt_text','image_tag')
 admin.site.register(Banner,BannerAdmin)
@@ -53,7 +52,11 @@ class CartOrderItemsInlineForm(forms.ModelForm):
 		for f in self.fields:
 			self.fields[f].widget.attrs['readonly'] = 'readonly'
 
-class CartOrderItemsInline(admin.TabularInline):
+class CartOrderItemsInline(admin.StackedInline):
+	def has_add_permission(self, request, obj=None):
+		return False
+	def has_delete_permission(self, request, obj=None):
+		return False
 	model = CartOrderItems
 	form = CartOrderItemsInlineForm
 #admin.site.register(CartOrderItems,CartOrderItemsAdmin)
@@ -62,7 +65,7 @@ class CartOrderItemsInline(admin.TabularInline):
 class CartOrderAdmin(admin.ModelAdmin):
 	inlines = [CartOrderItemsInline]
 	list_editable=('paid_status','order_status')
-	list_display=('user','total_amt','paid_status','order_dt','order_status')
+	list_display=('user','total_amt','paid_status','address','order_dt','order_status')
 admin.site.register(CartOrder,CartOrderAdmin)
 
 
