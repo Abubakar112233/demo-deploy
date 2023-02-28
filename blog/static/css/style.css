@@ -1142,13 +1142,18 @@ ol {
 	border-radius: 50%;
 	opacity: 0;
 }
-.product__item__text .product__color__select label:after {
+
+.product__item__text .product__color__select .product__size__select label.active:after {
+	opacity: 1;
+}
+
+.product__item__text .product__color__select .product__size__select label:after {
 	position: absolute;
 	left: -3px;
 	top: -3px;
-	height: 18px;
-	width: 18px;
-	border: 1px solid #b9b9b9;
+	height: 22px;
+	width: 22px;
+	border: 2px solid #b9b9b9;
 	content: "";
 	border-radius: 50%;
 	opacity: 0;

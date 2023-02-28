@@ -35,7 +35,7 @@
 								<img src="/media/{{data.productattribute_set.first.image}}" class="card-img-top product-image-{{data.id}}" alt="{{data.title}}">
 							</div>
 						</div>
-						{% for images in data.product_pictures %}
+						{% for images in product_pictures %}
 						<div class="tab-pane" id="tabs-{{forloop.counter | add:1}}" role="tabpanel">
 							<div class="product__details__pic__item">
 								<img src="{{images}}" alt="">
@@ -45,12 +45,6 @@
 					</div>
 					
 					<ul class="nav nav-tabs" role="tablist">
-						<li class="nav-item">
-							<a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab">
-								<div class="product__thumb__pic set-bg product-image-{{data.id}}" data-setbg="/media/{{data.productattribute_set.first.image}}" alt="{{data.title}}">
-								</div>
-							</a>
-						</li>
 						{% for images in product_pictures %}
 						<li class="nav-item">
 							<a class="nav-link" data-toggle="tab" href="#tabs-{{forloop.counter | add:1}}" role="tab">
@@ -197,7 +191,7 @@
 							</li>
 							<li class="nav-item">
 								<a class="nav-link" data-toggle="tab" href="#tabs-6" role="tab">Customer
-								Previews(5)</a>
+								Reviews</a>
 							</li>
 						</ul>
 						<div class="tab-content">
