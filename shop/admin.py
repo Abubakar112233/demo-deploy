@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Banner,Category,Brand,Color,Size,ProductPicture,Product,ProductAttribute,ProductTag,CartOrder,CartOrderItems,ProductReview,Wishlist,UserAddressBook,Cart,Countries
+from .models import Banner,Category,Brand,Color,Size,ProductPicture,Product,ProductAttribute,ProductTag,CartOrder,CartOrderItems,ProductReview,Wishlist,UserAddressBook,Cart,Countries,ProductAttributePictures,Images
 from django import forms
 
 # admin.site.register(Banner)
@@ -29,9 +29,15 @@ class ProductAttributeInline(admin.TabularInline):
 class ProductTagsInline(admin.TabularInline):
 	model = ProductTag
 
+class ImagesInline(admin.TabularInline):
+	model=Images
+
+class ProductAttributePicturesAdmin(admin.ModelAdmin):
+	inlines=[ImagesInline]
+admin.site.register(ProductAttributePictures, ProductAttributePicturesAdmin)
 # Product Attribute
 class ProductAttributeAdmin(admin.ModelAdmin):
-    list_display=('id','image_tag','product','price','discount','sell_price','quantity','color','size')
+    list_display=('id','product','price','discount','sell_price','quantity','color','size')
 admin.site.register(ProductAttribute, ProductAttributeAdmin)
 
 class ProductAdmin(admin.ModelAdmin):

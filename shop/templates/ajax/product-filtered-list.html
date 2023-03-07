@@ -3,7 +3,7 @@
 {% for product in data %}
         <div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 product-box">
             <div class="product__item sale">
-                <div class="product__item__pic set-bg" data-setbg="/media/{{product.image}}">
+                <div class="product__item__pic set-bg" data-setbg="{{product.image.images_set.first.picture.url}}">
                     
                     {% if product.sell_price != product.price %}
                     <span class="label" style="background-color: red;"><span>{{product.discount}}</span>% off</span>

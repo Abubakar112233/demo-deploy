@@ -26,7 +26,7 @@
 										<img src="/media/{{data.product_attribute.image}}" width="80px" alt="">
 									</div>
 									<div class="product__cart__item__text">
-										<h6><a href="/product/{{data.product.title|slugify}}/{{data.product_attribute.id}}">{{data.product_attribute.product.title}}</a></h6>
+										<h6><a href="/product/{{data.product_attribute.product.slug|slugify}}/{{data.product_attribute.product.id}}">{{data.product_attribute.product.title}}</a></h6>
 										<h5>{% currency_converter user data.product_attribute.sell_price %}</h5>
 									</div>
 								</td>
@@ -59,10 +59,10 @@
 							<tr>
 								<td class="product__cart__item">
 									<div class="product__cart__item__pic">
-										<img src="/media/{% get_obj product_id "image" %}" width="80px" alt="">
+										<img src="/media/{% get_cart_image product_id "image" %}" width="80px" alt="">
 									</div>
 									<div class="product__cart__item__text">
-										<h6><a href="/product/{{item.title|slugify}}/{{product_id}}">{{item.title}}</a></h6>
+										<h6><a href="/product/{{slug.slug}}/{{slug.id}}">{{item.title}}</a></h6>
 										<h5>{% currency_converter_session request sell_prices %}</h5>
 									</div>
 								</td>
@@ -111,7 +111,7 @@
 					<ul>
 						<li>Subtotal 
 							<span>
-								{% if request.user_isauthenticated %}
+								{% if user.is_authenticated %}
 									{% currency_converter user total_amt %}
 								{% else %}
 									{% currency_converter_session request total_amt %}
@@ -120,7 +120,7 @@
 						</li>
 						<li>Total 
 							<span>
-								{% if request.user_isauthenticated %}
+								{% if user.is_authenticated %}
 									{% currency_converter user total_amt %}
 								{% else %}
 									{% currency_converter_session request total_amt %}

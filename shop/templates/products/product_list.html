@@ -41,8 +41,11 @@
 					{% for product in data %}
 					<div class="col-lg-3 col-md-6 col-sm-6 col-md-6 col-sm-6 product-box">
 						<div class="product__item sale get_product_id" data-productid="{{product.id}}">
-							<div class="product__item__pic set-bg product-home-image-{{product.id}}" data-setbg="{{product.productattribute_set.first.image.url}}">
-								
+							<div class="product__item__pic set-bg product-home-image-{{product.id}}" data-setbg="{{product.productattribute_set.first.image.images_set.first.picture.url}}">
+								{% get_product_image product as get_image %}
+								{% for images in get_image %}
+								<div style="display: none;" class="image{{images.color__id}}{{product.id}}" data-image-{{product.id}}="{{images.image__images__picture}}"></div>
+								{% endfor %}
 								{% if product.productattribute_set.first.sell_price != product.productattribute_set.first.price %}
 								<span class="label" style="background-color: red;"><span class="product-discount-label-{{product.id}}">{{product.productattribute_set.first.discount}}</span>% off</span>
 								{% else %}
@@ -142,7 +145,7 @@
 								<div class="product__size__select">  
 									{% get_product_size product.id as product_sizes %}
 									{% for size in product_sizes %}
-									<label class="choose-size color{{size.color__id}}" data-size="{{size.size__id}}" data-price-{{product.id}}="{% if user.is_authenticated %}{% get_price user size.price size.discount %}{% else %}{% get_price_session request size.price size.discount %}{% endif %}" data-discount-{{product.id}}="{% if user.is_authenticated %}{% get_discount_price user size.price %}{% else %}{% get_discount_price_session request size.price %}{% endif %}" data-discountlabel-{{product.id}}="{{size.discount}}" data-image-{{product.id}}="{{size.image}}" for="{{size.size__size_code}}">{{size.size__size_code}}
+									<label class="choose-size color{{size.color__id}}" data-size="{{size.size__id}}" data-price-{{product.id}}="{% if user.is_authenticated %}{% get_price user size.price size.discount %}{% else %}{% get_price_session request size.price size.discount %}{% endif %}" data-discount-{{product.id}}="{% if user.is_authenticated %}{% get_discount_price user size.price %}{% else %}{% get_discount_price_session request size.price %}{% endif %}" data-discountlabel-{{product.id}}="{{size.discount}}" for="{{size.size__size_code}}">{{size.size__size_code}}
 										<input type="radio" id="{{size.size__size_code}}">
 									</label>
 									{% endfor %}

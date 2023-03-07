@@ -61,6 +61,11 @@ def get_obj(pk,attr):
     return obj
 
 @register.simple_tag
+def get_cart_image(pk,attr):
+    obj = getattr(ProductAttribute.objects.get(pk=int(pk)), attr)
+    return obj.images_set.first().picture
+
+@register.simple_tag
 def get_color(pk,attr):
     obj = getattr(ProductAttribute.objects.get(pk=int(pk)), attr)
     return obj.color_code
@@ -77,8 +82,14 @@ def get_product_color(data):
 
 @register.simple_tag
 def get_product_size(data):
-    sizes=ProductAttribute.objects.filter(product=data).filter(quantity__gt=0).values('size__id','size__title','size__size_code','price','discount','color__id','image').distinct()
+    sizes=ProductAttribute.objects.filter(product=data).filter(quantity__gt=0).values('size__id','size__title','size__size_code','price','discount','color__id').distinct()
     return sizes
+
+@register.simple_tag
+def get_product_image(data):
+    images=ProductAttribute.objects.filter(product=data).filter(quantity__gt=0).values('image__images__picture','color__id').distinct()
+    return images
+    
 
 @register.simple_tag
 def get_currency_options():

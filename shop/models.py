@@ -99,6 +99,15 @@ class ProductPicture(models.Model):
     def __str__(self):
         return self.picture.url
 
+#Product Attribute Pictures
+class ProductAttributePictures(models.Model):
+    name = models.CharField(max_length=500)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+
+class Images(models.Model):
+    picture = models.ImageField(upload_to='shop/product_images', null=True, blank=True)  
+    product = models.ForeignKey(ProductAttributePictures, on_delete=models.CASCADE)
+
 # Product Attribute
 class ProductAttribute(models.Model):
     product=models.ForeignKey(Product,on_delete=models.CASCADE)
@@ -108,7 +117,7 @@ class ProductAttribute(models.Model):
     discount=models.IntegerField(validators=[MinValueValidator(0.0), MaxValueValidator(100.0)],default=0.0)
     quantity=models.PositiveIntegerField(default=0)
     sell_price=models.FloatField(null=True, validators=[MinValueValidator(0.0)])
-    image=models.ImageField(upload_to="product_imgs/",null=True)
+    image=models.ForeignKey(ProductAttributePictures, on_delete=models.CASCADE, default=1)
 
     @property
     def sell_price(self):
@@ -124,8 +133,8 @@ class ProductAttribute(models.Model):
     def __str__(self):
         return self.product.title
 
-    def image_tag(self):
-        return mark_safe('<img src="%s" width="50" height="50" />' % (self.image.url))
+    #def image_tag(self):
+        #return mark_safe('<img src="%s" width="50" height="50" />' % (self.image.url))
 
 # Product Tags
 class ProductTag(models.Model):

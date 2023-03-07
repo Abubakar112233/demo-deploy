@@ -54,10 +54,10 @@
 									{% endif %}
 									<td class="product__cart__item">
 										<div class="product__cart__item__pic">
-											<img src="/media/{{data.product_attribute.image}}" width="80px" alt="">
+											<img src="{{data.product_attribute.image.images_set.first.picture.url}}" width="80px" alt="">
 										</div>
 										<div class="product__cart__item__text">
-											<h6><a href="/product/{{data.product.title|slugify}}/{{data.product_attribute.id}}">{{data.product_attribute.product.title}}</a></h6>
+											<h6><a href="/product/{{data.product_attribute.product.slug|slugify}}/{{data.product_attribute.product.id}}">{{data.product_attribute.product.title}}</a></h6>
 											<h5>{% currency_converter user data.product_attribute.sell_price %}</h5>
 										</div>
 									</td>
@@ -99,10 +99,11 @@
 									{% endif %}
 									<td class="product__cart__item">
 										<div class="product__cart__item__pic">
-											<img src="/media/{% get_obj product_id "image" %}" width="80px" alt="">
+											<img src="/media/{% get_cart_image product_id "image" %}" width="80px" alt="">
 										</div>
 										<div class="product__cart__item__text">
-											<h6><a href="/product/{{item.title|slugify}}/{{product_id}}">{{item.title}}</a></h6>
+											{% get_obj product_id "product" as slug %}
+											<h6><a href="/product/{{slug.slug}}/{{slug.id}}">{{item.title}}</a></h6>
 											<h5>{% currency_converter_session request sell_prices %}</h5>
 										</div>
 									</td>
