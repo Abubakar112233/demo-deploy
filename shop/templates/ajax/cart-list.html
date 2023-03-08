@@ -23,7 +23,7 @@
 							<tr>
 								<td class="product__cart__item">
 									<div class="product__cart__item__pic">
-										<img src="/media/{{data.product_attribute.image}}" width="80px" alt="">
+										<img src="{{data.product_attribute.image.images_set.first.picture.url}}" width="80px" alt="">
 									</div>
 									<div class="product__cart__item__text">
 										<h6><a href="/product/{{data.product_attribute.product.slug|slugify}}/{{data.product_attribute.product.id}}">{{data.product_attribute.product.title}}</a></h6>

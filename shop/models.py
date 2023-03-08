@@ -92,13 +92,6 @@ class Product(models.Model):
     def __str__(self):
         return self.title
 
-# product image model
-class ProductPicture(models.Model):
-    picture = models.ImageField(upload_to='shop/product_images', null=True, blank=True)  
-    Product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    def __str__(self):
-        return self.picture.url
-
 #Product Attribute Pictures
 class ProductAttributePictures(models.Model):
     name = models.CharField(max_length=500)

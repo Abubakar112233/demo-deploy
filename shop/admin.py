@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Banner,Category,Brand,Color,Size,ProductPicture,Product,ProductAttribute,ProductTag,CartOrder,CartOrderItems,ProductReview,Wishlist,UserAddressBook,Cart,Countries,ProductAttributePictures,Images
+from .models import Banner,Category,Brand,Color,Size,Product,ProductAttribute,ProductTag,CartOrder,CartOrderItems,ProductReview,Wishlist,UserAddressBook,Cart,Countries,ProductAttributePictures,Images
 from django import forms
 
 # admin.site.register(Banner)
@@ -17,9 +17,6 @@ admin.site.register(Category,CategoryAdmin)
 class ColorAdmin(admin.ModelAdmin):
 	list_display=('title','color_bg')
 admin.site.register(Color,ColorAdmin)
-
-class ProductPictureInline(admin.TabularInline):
-    model = ProductPicture
 
 # Product Attribute
 class ProductAttributeInline(admin.TabularInline):
@@ -41,7 +38,7 @@ class ProductAttributeAdmin(admin.ModelAdmin):
 admin.site.register(ProductAttribute, ProductAttributeAdmin)
 
 class ProductAdmin(admin.ModelAdmin):
-    inlines = [ProductPictureInline, ProductAttributeInline,ProductTagsInline]
+    inlines = [ProductAttributeInline,ProductTagsInline]
     list_display=('id','title','category','brand','status','is_featured')
     list_editable=('status','is_featured')
 admin.site.register(Product,ProductAdmin)

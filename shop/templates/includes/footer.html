@@ -38,9 +38,11 @@
                     <h6>NewLetter</h6>
                     <div class="footer__newslatter">
                         <p>Be the first to know about new arrivals, look books, sales & promos!</p>
-                        <form action="#">
-                            <input type="text" placeholder="Your email">
-                            <button type="submit"><span class="icon_mail_alt"></span></button>
+                        <form action="{% url 'subscribe' %}" method="post">
+                            {% csrf_token %}
+                            <input id="name" name="name" type="text" placeholder="Your Name">
+                            <input id="email" name="email" type="email" placeholder="Your Email">
+                            <button type="submit"><span style="margin-right: 5px;" class="icon_mail_alt"></span>Subscribe</button>
                         </form>
                     </div>
                 </div>

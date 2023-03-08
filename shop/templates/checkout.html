@@ -70,14 +70,30 @@
 					</div>
 					<div class="col-lg-12 col-md-12">
 						<div class="checkout__order">
-							<h4 class="order__title">Your order</h4>
-							<div class="checkout__order__products">Product <span>Total</span><span>Price</span><span>Qty</span></div>
-							<ul class="checkout__total__products">
-								{% for item in cart_items %}
-								{% multiplier item.product_attribute.sell_price item.qty as sell_prices %}
-								<li>0{{forloop.counter}}. {{item.product_attribute.product.title}} - {{item.product_attribute.color}} - {{item.product_attribute.size.size_code}}<span>{% currency_converter user sell_prices %}</span><span>{% currency_converter user item.product_attribute.sell_price %}</span><span>{{item.qty}}</span></li>
-								{% endfor %}
-							</ul>
+							<h4 class="order__title">Your order</h4>		
+							<div class="checkout__table">	
+							<table>
+								<thead>
+									<tr>
+										<th class="product__name">Product</th>
+										<th class="table__right">Qty</th>
+										<th class="table__right">Price</th>
+										<th class="table__right">Total</th>
+									</tr>
+								</thead>
+								<tbody>
+									{% for item in cart_items %}
+									{% multiplier item.product_attribute.sell_price item.qty as sell_prices %}
+									<tr>
+										<td class="product__name">0{{forloop.counter}}. {{item.product_attribute.product.title}} - {{item.product_attribute.color}} - {{item.product_attribute.size.size_code}}</td>
+										<td class="table__right">{{item.qty}}</td>
+										<td class="table__right">{% currency_converter user sell_prices %}</td>
+										<td class="table__right">{% currency_converter user item.product_attribute.sell_price %}</td>
+									</tr>
+									{% endfor %}
+								</tbody>
+							</table>
+							</div>
 							<ul class="checkout__total__all">
 								<li>Delivery Cost <span class="address-cost">{% currency_converter user address_cost %}</span></li>
 								<li>Product Total <span>{% currency_converter user total_amt %}</span></li>

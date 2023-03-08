@@ -166,6 +166,11 @@ ol {
 	color: #ffffff;
 	background: #000000;
 	letter-spacing: 4px;
+	transition: all 0.5s ease;
+}
+
+.primary-btn:hover {
+	background-color: #372c2c;
 }
 
 .site-btn {
@@ -2027,9 +2032,9 @@ ol {
 .footer__widget .footer__newslatter form button {
 	color: #b7b7b7;
 	font-size: 16px;
-	position: absolute;
+	position: relative;
 	right: 5px;
-	top: 0;
+	top: 20px;
 	height: 100%;
 	background: transparent;
 	border: none;
@@ -2693,16 +2698,26 @@ ol {
 	margin-bottom: 18px;
 }
 
-.checkout__order__products span {
-	float: right;
-	padding-left: 80px;
+.checkout__table table thead tr th{
+	padding-bottom: 15px;
+}
+.checkout__table{
+	padding-bottom: 25px;
+}
+.checkout__table table tbody tr td.table__right{
+	width: 100px;
+	text-align: center;
+}
+.checkout__table table thead tr th.table__right{
+	width: 100px;
+	text-align: center;
 }
 
-.checkout__total__products {
-	margin-bottom: 20px;
+.checkout__table table tbody tr td.product__name{
+	width: 900px;
 }
 
-.checkout__total__products li {
+.checkout__table table tbody tr td{
 	font-size: 16px;
 	color: #444444;
 	list-style: none;

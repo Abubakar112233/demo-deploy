@@ -1,7 +1,7 @@
 import stripe
 from django.shortcuts import render,redirect
 from django.http import JsonResponse,HttpResponse
-from .models import Banner,Category,Brand,Product,ProductAttribute,ProductPicture,ProductTag,CartOrder,CartOrderItems,ProductReview,Wishlist,UserAddressBook,Color,Size,Cart
+from .models import Banner,Category,Brand,Product,ProductAttribute,ProductTag,CartOrder,CartOrderItems,ProductReview,Wishlist,UserAddressBook,Color,Size,Cart
 from blog.models import Article
 from users.models import Currency, CustomUser
 from django.contrib import messages
@@ -361,7 +361,6 @@ def update_cart_item(request):
 		cart = Cart.objects.get(id=p_id)
 		cart.qty = p_qty
 		cart.save()
-
 
 		cart_items = Cart.objects.filter(user=user)
 		
