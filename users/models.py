@@ -14,9 +14,6 @@ class Currency(models.Model):
         return self.currency_short_name
 
 class CustomUser(AbstractUser):
-    def get_default_action_status():
-        return Currency.objects.get(currency_short_name="AED").pk
-
     def image_upload_to(self, instance=None):
         if instance:
             return os.path.join("Users", self.username, instance)
@@ -32,7 +29,7 @@ class CustomUser(AbstractUser):
     status = models.CharField(max_length=100, choices=STATUS, default='regular')
     description = models.TextField("Description", max_length=600, default='', blank=True)
     image = models.ImageField(default='default/user.jpg', upload_to=image_upload_to)
-    currency = models.ForeignKey(Currency, default=get_default_action_status(), on_delete=models.CASCADE)
+    currency = models.ForeignKey(Currency, default=1, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.username

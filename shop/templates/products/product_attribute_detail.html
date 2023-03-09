@@ -107,7 +107,7 @@
 								<span style="background-color: red; padding: 5px;"><span class="product-discount-label-{{data.product.id}}">{{data.discount}}</span>% off</span><br>
 								<br><h4>Stock: <span style="color: green;">{{data.quantity}}</span></h4><br>
 								
-								<p>{{data.desc}}</p>
+								<p>{{data.product.description | safe | truncatewords:30}} <span>Sroll up for more</span> </p>
 								<div class="product__details__option">
 									<div class="product__details__option__color" style="padding-bottom: 20px;">
 										<span>Color:</span>	
@@ -178,7 +178,7 @@
 								<div class="product__details__tab__content">
 									<div class="product__details__tab__content__item">
 										<h5>Products Infomation</h5>
-										<p>{{data.data.detail}}.</p>
+										<p>{{data.product.description | safe}}.</p>
 									</div>
 								</div>
 							</div>

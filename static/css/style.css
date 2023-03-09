@@ -33,7 +33,7 @@
 html,
 body {
 	height: 100%;
-	font-family: "Nunito Sans", sans-serif;
+	font-family: "Helvectica", sans-serif;
 	-webkit-font-smoothing: antialiased;
 }
 
@@ -46,7 +46,7 @@ h6 {
 	margin: 0;
 	color: #111111;
 	font-weight: 400;
-	font-family: "Nunito Sans", sans-serif;
+	font-family: "Helvectica", sans-serif;
 }
 
 h1 {
@@ -166,6 +166,11 @@ ol {
 	color: #ffffff;
 	background: #000000;
 	letter-spacing: 4px;
+	transition: all 0.5s ease;
+}
+
+.primary-btn:hover {
+	background-color: #372c2c;
 }
 
 .site-btn {
@@ -1094,8 +1099,9 @@ ol {
 }
 
 .product__item__text h5 {
+	font-size: 15px;
 	color: #0d0d0d;
-	font-weight: 700;
+	font-weight: 600;
 }
 
 .product__item__text .product__color__select {
@@ -1142,13 +1148,18 @@ ol {
 	border-radius: 50%;
 	opacity: 0;
 }
-.product__item__text .product__color__select label:after {
+
+.product__item__text .product__color__select .product__size__select label.active:after {
+	opacity: 1;
+}
+
+.product__item__text .product__color__select .product__size__select label:after {
 	position: absolute;
 	left: -3px;
 	top: -3px;
-	height: 18px;
-	width: 18px;
-	border: 1px solid #b9b9b9;
+	height: 22px;
+	width: 22px;
+	border: 2px solid #b9b9b9;
 	content: "";
 	border-radius: 50%;
 	opacity: 0;
@@ -2022,9 +2033,9 @@ ol {
 .footer__widget .footer__newslatter form button {
 	color: #b7b7b7;
 	font-size: 16px;
-	position: absolute;
+	position: relative;
 	right: 5px;
-	top: 0;
+	top: 20px;
 	height: 100%;
 	background: transparent;
 	border: none;
@@ -2688,16 +2699,26 @@ ol {
 	margin-bottom: 18px;
 }
 
-.checkout__order__products span {
-	float: right;
-	padding-left: 80px;
+.checkout__table table thead tr th{
+	padding-bottom: 15px;
+}
+.checkout__table{
+	padding-bottom: 25px;
+}
+.checkout__table table tbody tr td.table__right{
+	width: 100px;
+	text-align: center;
+}
+.checkout__table table thead tr th.table__right{
+	width: 100px;
+	text-align: center;
 }
 
-.checkout__total__products {
-	margin-bottom: 20px;
+.checkout__table table tbody tr td.product__name{
+	width: 900px;
 }
 
-.checkout__total__products li {
+.checkout__table table tbody tr td{
 	font-size: 16px;
 	color: #444444;
 	list-style: none;

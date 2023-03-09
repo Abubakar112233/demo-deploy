@@ -3,6 +3,7 @@ from django.utils.html import mark_safe
 from django.contrib.auth import get_user_model
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.utils import timezone
+from tinymce.models import HTMLField
 
 class Banner(models.Model):
     title=models.CharField(max_length=200)
@@ -46,6 +47,9 @@ class Brand(models.Model):
 
     def __str__(self):
         return self.title
+    
+    def image_tag(self):
+        return mark_safe('<img src="%s" width="50" height="50" />' % (self.image.url))
 
 # Color
 class Color(models.Model):
@@ -77,9 +81,7 @@ class Product(models.Model):
     title=models.CharField(max_length=200)
     slug=models.CharField(max_length=400)
     sku=models.CharField(max_length=100)
-    desc=models.TextField()
-    detail=models.TextField()
-    specs=models.TextField()
+    description=HTMLField(blank=True, default="")
     category=models.ForeignKey(Category,on_delete=models.CASCADE)
     brand=models.ForeignKey(Brand,on_delete=models.CASCADE)
     status=models.BooleanField(default=True)
@@ -95,11 +97,17 @@ class Product(models.Model):
 #Product Attribute Pictures
 class ProductAttributePictures(models.Model):
     name = models.CharField(max_length=500)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    def __str__(self):
+        return self.name
+    class Meta:
+        verbose_name_plural='Product Attribute Pictures'
 
 class Images(models.Model):
     picture = models.ImageField(upload_to='shop/product_images', null=True, blank=True)  
     product = models.ForeignKey(ProductAttributePictures, on_delete=models.CASCADE)
+
+    class Meta:
+        verbose_name_plural='Images'
 
 # Product Attribute
 class ProductAttribute(models.Model):
@@ -136,6 +144,8 @@ class ProductTag(models.Model):
 
     def __str__(self):
         return self.tag_name
+    class Meta:
+        verbose_name_plural='Product Tags'
 
 # Order
 status_choice=(
@@ -152,13 +162,19 @@ class Cart(models.Model):
     def __str__(self):
         return self.product_attribute.product.title
 
+    class Meta:
+        verbose_name_plural='Cart Items'
+
 # AddressBook
 class Countries(models.Model):
-    country_name=models.TextField()
+    country_name=models.CharField(max_length=1000)
     delivery_price=models.FloatField(default=25.0)
 
     def __str__(self):
         return self.country_name
+    
+    class Meta:
+        verbose_name_plural='Countries'
 
 # AddressBook
 class UserAddressBook(models.Model):
@@ -175,14 +191,14 @@ class UserAddressBook(models.Model):
         return self.country.country_name
 
     class Meta:
-        verbose_name_plural='AddressBook'
+        verbose_name_plural='Address Book'
 
 class CartOrder(models.Model):
     user=models.ForeignKey(get_user_model(),on_delete=models.CASCADE)
     total_amt=models.FloatField()
     address=models.ForeignKey(UserAddressBook, on_delete=models.CASCADE)
     order_dt=models.DateTimeField(auto_now_add=True)
-    order_status=models.CharField(choices=status_choice,default='process',max_length=150)
+    order_status=models.CharField(choices=status_choice,default='processing',max_length=150)
     paid_status=models.BooleanField(default=False)
 
     class Meta:
@@ -198,6 +214,9 @@ class CartOrderItems(models.Model):
     price=models.FloatField()
     total=models.FloatField()
 
+    def __str__(self):
+        return self.invoice_no
+    
     class Meta:
         verbose_name_plural='Order Items'
 
@@ -206,17 +225,17 @@ class CartOrderItems(models.Model):
 
 # Product Review
 RATING=(
-    (1,'1'),
-    (2,'2'),
-    (3,'3'),
-    (4,'4'),
-    (5,'5'),
+    (1,1),
+    (2,2),
+    (3,3),
+    (4,4),
+    (5,5),
 )
 class ProductReview(models.Model):
     user=models.ForeignKey(get_user_model(),on_delete=models.CASCADE)
     product=models.ForeignKey(Product,on_delete=models.CASCADE)
     review_text=models.TextField()
-    review_rating=models.CharField(choices=RATING,max_length=150)
+    review_rating=models.IntegerField(choices=RATING)
 
     class Meta:
         verbose_name_plural='Reviews'

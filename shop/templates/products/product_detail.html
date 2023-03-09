@@ -124,7 +124,7 @@
 								<span style="background-color: red; padding: 5px;"><span class="product-discount-label-{{data.id}}">{{data.productattribute_set.first.discount}}</span>% off</span><br>
 								<br><h4>Stock: <span style="color: green;" class="product-stock-{{data.id}}">{{data.productattribute_set.first.quantity}}</span></h4><br>
 								
-								<p>{{data.desc}}</p>
+								<p>{{data.description | safe | truncatewords:30}} <span>Sroll up for more</span>}}</p>
 								<div class="product__details__option">
 									<div class="product__details__option__color" style="padding-bottom: 20px;">
 										<span>Color:</span>	
@@ -199,7 +199,7 @@
 								<div class="product__details__tab__content">
 									<div class="product__details__tab__content__item">
 										<h5>Products Infomation</h5>
-										<p>{{data.detail}}.</p>
+										<p>{{data.description | safe}}.</p>
 									</div>
 								</div>
 							</div>

@@ -1099,8 +1099,9 @@ ol {
 }
 
 .product__item__text h5 {
+	font-size: 15px;
 	color: #0d0d0d;
-	font-weight: 700;
+	font-weight: 600;
 }
 
 .product__item__text .product__color__select {
